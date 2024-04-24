@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.arrow.vector)
     implementation(libs.arrow.format)
     implementation(libs.arrow.memory)
+    implementation(libs.arrow.dataset)
     implementation(libs.commonsCompress)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.datetimeJvm)
