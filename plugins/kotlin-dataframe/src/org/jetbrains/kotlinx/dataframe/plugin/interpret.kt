@@ -89,13 +89,14 @@ fun <T> KotlinTypeFacade.interpret(
     val actualArgsMap = refinedArguments.associateBy { it.name.identifier }.toSortedMap()
     val conflictingKeys = additionalArguments.keys intersect actualArgsMap.keys
     if (conflictingKeys.isNotEmpty()) {
-        error("Conflicting keys: $conflictingKeys")
+        interpretationFrameworkError("Conflicting keys: $conflictingKeys")
     }
     val expectedArgsMap = processor.expectedArguments
         .filterNot { it.name.startsWith("typeArg") }
         .associateBy { it.name }.toSortedMap().minus(additionalArguments.keys)
 
-    if (expectedArgsMap.keys - defaultArguments != actualArgsMap.keys - defaultArguments) {
+    val unexpectedArguments = expectedArgsMap.keys - defaultArguments != actualArgsMap.keys - defaultArguments
+    if (unexpectedArguments) {
         val message = buildString {
             appendLine("ERROR: Different set of arguments")
             appendLine("Implementation class: $processor")
@@ -105,8 +106,7 @@ fun <T> KotlinTypeFacade.interpret(
             appendLine("add arguments to an interpeter:")
             appendLine(diff.map { actualArgsMap[it] })
         }
-        reporter.reportInterpretationError(functionCall, message)
-        return null
+        interpretationFrameworkError(message)
     }
 
     val arguments = mutableMapOf<String, Interpreter.Success<Any?>>()
@@ -204,7 +204,8 @@ fun <T> KotlinTypeFacade.interpret(
             }
 
             is Interpreter.Dsl -> {
-                { receiver: Any ->
+                { receiver: Any, dslArguments: Map<String, Interpreter.Success<Any?>> ->
+                    val map = mapOf("dsl" to Interpreter.Success(receiver)) + dslArguments
                     (it.expression as FirAnonymousFunctionExpression)
                         .anonymousFunction.body!!
                         .statements.filterIsInstance<FirFunctionCall>()
@@ -213,7 +214,7 @@ fun <T> KotlinTypeFacade.interpret(
                             interpret(
                                 call,
                                 schemaProcessor,
-                                mapOf("dsl" to Interpreter.Success(receiver)),
+                                map,
                                 reporter
                             )
                         }
@@ -268,6 +269,10 @@ fun <T> KotlinTypeFacade.interpret(
         return null
     }
 }
+
+fun interpretationFrameworkError(message: String): Nothing = throw InterpretationFrameworkError(message)
+
+class InterpretationFrameworkError(message: String) : Error(message)
 
 interface InterpretationErrorReporter {
     val errorReported: Boolean

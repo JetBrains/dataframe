@@ -1,0 +1,163 @@
+FILE: unfold_replace_dsl.kt
+    public final data class Function : R|kotlin/Any| {
+        public constructor(name: R|kotlin/String|): R|Function| {
+            super<R|kotlin/Any|>()
+        }
+
+        public final val name: R|kotlin/String| = R|<local>/name|
+            public get(): R|kotlin/String|
+
+        public final operator fun component1(): R|kotlin/String|
+
+        public final fun copy(name: R|kotlin/String| = this@R|/Function|.R|/Function.name|): R|Function|
+
+    }
+    public final data class Declaration : R|kotlin/Any| {
+        public constructor(name: R|kotlin/String|, functions: R|Function|): R|Declaration| {
+            super<R|kotlin/Any|>()
+        }
+
+        public final val name: R|kotlin/String| = R|<local>/name|
+            public get(): R|kotlin/String|
+
+        public final val functions: R|Function| = R|<local>/functions|
+            public get(): R|Function|
+
+        public final operator fun component1(): R|kotlin/String|
+
+        public final operator fun component2(): R|Function|
+
+        public final fun copy(name: R|kotlin/String| = this@R|/Declaration|.R|/Declaration.name|, functions: R|Function| = this@R|/Declaration|.R|/Declaration.functions|): R|Declaration|
+
+    }
+    public final fun box(): R|kotlin/String| {
+        lval df: R|org/jetbrains/kotlinx/dataframe/DataFrame<<local>/Declaration_48>| = R|kotlin/collections/listOf|<R|Declaration|>(R|/Declaration.Declaration|(String(DataFrameImpl), R|/Function.Function|(String(rowsCount)))).R|kotlin/let|<R|kotlin/collections/List<Declaration>|, R|org/jetbrains/kotlinx/dataframe/DataFrame<<local>/Declaration_48>|>(<L> = fun <anonymous>(it: R|kotlin/collections/List<Declaration>|): R|org/jetbrains/kotlinx/dataframe/DataFrame<<local>/Declaration_48>| <inline=Inline, kind=EXACTLY_ONCE>  {
+            local abstract class Declaration_48I : R|kotlin/Any| {
+                @R|org/jetbrains/kotlinx/dataframe/annotations/Order|(order = Int(1)) public abstract val functions: R|Function|
+                    public get(): R|Function|
+
+                @R|org/jetbrains/kotlinx/dataframe/annotations/Order|(order = Int(0)) public abstract val name: R|kotlin/String|
+                    public get(): R|kotlin/String|
+
+                public constructor(): R|<local>/Declaration_48I|
+
+            }
+
+            local final class Scope0 : R|kotlin/Any| {
+                public final val R|org/jetbrains/kotlinx/dataframe/DataRow<<local>/Declaration_48I>|.functions: R|Function|
+                    public get(): R|Function|
+
+                public final val R|org/jetbrains/kotlinx/dataframe/ColumnsContainer<<local>/Declaration_48I>|.functions: R|org/jetbrains/kotlinx/dataframe/DataColumn<Function>|
+                    public get(): R|org/jetbrains/kotlinx/dataframe/DataColumn<Function>|
+
+                public final val R|org/jetbrains/kotlinx/dataframe/DataRow<<local>/Declaration_48I>|.name: R|kotlin/String|
+                    public get(): R|kotlin/String|
+
+                public final val R|org/jetbrains/kotlinx/dataframe/ColumnsContainer<<local>/Declaration_48I>|.name: R|org/jetbrains/kotlinx/dataframe/DataColumn<kotlin/String>|
+                    public get(): R|org/jetbrains/kotlinx/dataframe/DataColumn<kotlin/String>|
+
+                public constructor(): R|<local>/Scope0|
+
+            }
+
+            local abstract class Declaration_48 : R|<local>/Declaration_48I| {
+                public abstract var scope0: R|<local>/Scope0|
+                    public get(): R|<local>/Scope0|
+                    public set(value: R|<local>/Scope0|): R|kotlin/Unit|
+
+                public constructor(): R|<local>/Declaration_48|
+
+            }
+
+            ^ R|<local>/it|.R|org/jetbrains/kotlinx/dataframe/api/toDataFrame|<R|Declaration|>()
+        }
+        )
+        lval a: R|kotlin/String| = (this@R|/box|, R|<local>/df|).R|<local>/Scope0.name|.R|SubstitutionOverride<org/jetbrains/kotlinx/dataframe/DataColumn.get: R|kotlin/String|>|(Int(0))
+        lval b: R|Function| = (this@R|/box|, R|<local>/df|).R|<local>/Scope0.functions|.R|SubstitutionOverride<org/jetbrains/kotlinx/dataframe/DataColumn.get: R|Function|>|(Int(0))
+        lval df1: R|org/jetbrains/kotlinx/dataframe/DataFrame<<local>/Unfold_91>| = R|<local>/df|.R|org/jetbrains/kotlinx/dataframe/api/replace|<R|<local>/Declaration_48|, R|Function|>(<L> = replace@fun R|org/jetbrains/kotlinx/dataframe/api/ColumnsSelectionDsl<<local>/Declaration_48>|.<anonymous>(it: R|@R|kotlin/ParameterName|(name = String(it))  org/jetbrains/kotlinx/dataframe/api/ColumnsSelectionDsl<<local>/Declaration_48>|): R|org/jetbrains/kotlinx/dataframe/columns/ColumnsResolver<Function>| <inline=NoInline>  {
+            ^ (this@R|/box|, this@R|special/anonymous|).R|<local>/Scope0.functions|
+        }
+        ).R|kotlin/let|<R|org/jetbrains/kotlinx/dataframe/api/ReplaceClause<<local>/Declaration_48, Function>|, R|org/jetbrains/kotlinx/dataframe/DataFrame<<local>/Unfold_91>|>(<L> = fun <anonymous>(it: R|org/jetbrains/kotlinx/dataframe/api/ReplaceClause<<local>/Declaration_48, Function>|): R|org/jetbrains/kotlinx/dataframe/DataFrame<<local>/Unfold_91>| <inline=Inline, kind=EXACTLY_ONCE>  {
+            local abstract class Unfold_91I : R|kotlin/Any| {
+                @R|org/jetbrains/kotlinx/dataframe/annotations/Order|(order = Int(1)) public abstract val functions: R|org/jetbrains/kotlinx/dataframe/DataRow<<local>/Functions_251>|
+                    public get(): R|org/jetbrains/kotlinx/dataframe/DataRow<<local>/Functions_251>|
+
+                @R|org/jetbrains/kotlinx/dataframe/annotations/Order|(order = Int(0)) public abstract val name: R|kotlin/String|
+                    public get(): R|kotlin/String|
+
+                public constructor(): R|<local>/Unfold_91I|
+
+            }
+
+            local final class Scope0 : R|kotlin/Any| {
+                public final val R|org/jetbrains/kotlinx/dataframe/DataRow<<local>/Unfold_91I>|.functions: R|org/jetbrains/kotlinx/dataframe/DataRow<<local>/Functions_251>|
+                    public get(): R|org/jetbrains/kotlinx/dataframe/DataRow<<local>/Functions_251>|
+
+                public final val R|org/jetbrains/kotlinx/dataframe/ColumnsContainer<<local>/Unfold_91I>|.functions: R|org/jetbrains/kotlinx/dataframe/columns/ColumnGroup<<local>/Functions_251>|
+                    public get(): R|org/jetbrains/kotlinx/dataframe/columns/ColumnGroup<<local>/Functions_251>|
+
+                public final val R|org/jetbrains/kotlinx/dataframe/DataRow<<local>/Unfold_91I>|.name: R|kotlin/String|
+                    public get(): R|kotlin/String|
+
+                public final val R|org/jetbrains/kotlinx/dataframe/ColumnsContainer<<local>/Unfold_91I>|.name: R|org/jetbrains/kotlinx/dataframe/DataColumn<kotlin/String>|
+                    public get(): R|org/jetbrains/kotlinx/dataframe/DataColumn<kotlin/String>|
+
+                public constructor(): R|<local>/Scope0|
+
+            }
+
+            local abstract class Functions_251 : R|kotlin/Any| {
+                @R|org/jetbrains/kotlinx/dataframe/annotations/Order|(order = Int(1)) public abstract val nameLength: R|kotlin/Int|
+                    public get(): R|kotlin/Int|
+
+                @R|org/jetbrains/kotlinx/dataframe/annotations/Order|(order = Int(0)) public abstract val name: R|kotlin/String|
+                    public get(): R|kotlin/String|
+
+                public constructor(): R|<local>/Functions_251|
+
+            }
+
+            local final class Scope1 : R|kotlin/Any| {
+                public final val R|org/jetbrains/kotlinx/dataframe/DataRow<<local>/Functions_251>|.nameLength: R|kotlin/Int|
+                    public get(): R|kotlin/Int|
+
+                public final val R|org/jetbrains/kotlinx/dataframe/ColumnsContainer<<local>/Functions_251>|.nameLength: R|org/jetbrains/kotlinx/dataframe/DataColumn<kotlin/Int>|
+                    public get(): R|org/jetbrains/kotlinx/dataframe/DataColumn<kotlin/Int>|
+
+                public final val R|org/jetbrains/kotlinx/dataframe/DataRow<<local>/Functions_251>|.name: R|kotlin/String|
+                    public get(): R|kotlin/String|
+
+                public final val R|org/jetbrains/kotlinx/dataframe/ColumnsContainer<<local>/Functions_251>|.name: R|org/jetbrains/kotlinx/dataframe/DataColumn<kotlin/String>|
+                    public get(): R|org/jetbrains/kotlinx/dataframe/DataColumn<kotlin/String>|
+
+                public constructor(): R|<local>/Scope1|
+
+            }
+
+            local abstract class Unfold_91 : R|<local>/Unfold_91I| {
+                public abstract var scope0: R|<local>/Scope0|
+                    public get(): R|<local>/Scope0|
+                    public set(value: R|<local>/Scope0|): R|kotlin/Unit|
+
+                public abstract var scope1: R|<local>/Scope1|
+                    public get(): R|<local>/Scope1|
+                    public set(value: R|<local>/Scope1|): R|kotlin/Unit|
+
+                public constructor(): R|<local>/Unfold_91|
+
+            }
+
+            ^ R|<local>/it|.R|org/jetbrains/kotlinx/dataframe/api/unfold|<R|<local>/Declaration_48|, R|Function|>(<L> = unfold@fun R|org/jetbrains/kotlinx/dataframe/api/CreateDataFrameDsl<Function>|.<anonymous>(): R|kotlin/Unit| <inline=NoInline>  {
+                this@R|special/anonymous|.R|SubstitutionOverride<org/jetbrains/kotlinx/dataframe/api/CreateDataFrameDsl.properties: R|kotlin/Unit|>|(Int(0))
+                (this@R|special/anonymous|, String(nameLength)).R|SubstitutionOverride<org/jetbrains/kotlinx/dataframe/api/CreateDataFrameDsl.from: R|kotlin/Unit|>|<R|kotlin/Int|>(from@fun <anonymous>(it: R|Function|): R|kotlin/Int| <inline=NoInline>  {
+                    ^ R|<local>/it|.R|/Function.name|.R|kotlin/String.length|
+                }
+                )
+            }
+            )
+        }
+        )
+        lval c: R|org/jetbrains/kotlinx/dataframe/DataColumn<kotlin/String>| = (this@R|/box|, (this@R|/box|, R|<local>/df1|).R|<local>/Scope0.functions|).R|<local>/Scope1.name|
+        lval d: R|org/jetbrains/kotlinx/dataframe/DataColumn<kotlin/Int>| = (this@R|/box|, (this@R|/box|, R|<local>/df1|).R|<local>/Scope0.functions|).R|<local>/Scope1.nameLength|
+        ^box String(OK)
+    }

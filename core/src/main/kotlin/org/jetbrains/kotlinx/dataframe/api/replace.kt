@@ -6,6 +6,7 @@ import org.jetbrains.kotlinx.dataframe.ColumnsContainer
 import org.jetbrains.kotlinx.dataframe.ColumnsSelector
 import org.jetbrains.kotlinx.dataframe.DataColumn
 import org.jetbrains.kotlinx.dataframe.DataFrame
+import org.jetbrains.kotlinx.dataframe.annotations.Interpretable
 import org.jetbrains.kotlinx.dataframe.columns.ColumnReference
 import org.jetbrains.kotlinx.dataframe.columns.toColumnSet
 import org.jetbrains.kotlinx.dataframe.get
@@ -14,6 +15,7 @@ import org.jetbrains.kotlinx.dataframe.impl.api.insertImpl
 import org.jetbrains.kotlinx.dataframe.impl.api.removeImpl
 import kotlin.reflect.KProperty
 
+@Interpretable("Replace0")
 public fun <T, C> DataFrame<T>.replace(columns: ColumnsSelector<T, C>): ReplaceClause<T, C> =
     ReplaceClause(this, columns)
 

@@ -29,11 +29,11 @@ class RenameInto : AbstractSchemaModificationInterpreter() {
     override fun Arguments.interpret(): PluginDataFrameSchema {
         require(receiver.columns.size == newNames.size)
         var i = 0
-        return receiver.schema.map(receiver.columns.mapTo(mutableSetOf()) { it.path.path }, nextName = { newNames[i].also { i += 1 } })
+        return receiver.schema.rename(receiver.columns.mapTo(mutableSetOf()) { it.path.path }, nextName = { newNames[i].also { i += 1 } })
     }
 }
 
-internal fun PluginDataFrameSchema.map(selected: ColumnsSet, nextName: () -> String): PluginDataFrameSchema {
+internal fun PluginDataFrameSchema.rename(selected: ColumnsSet, nextName: () -> String): PluginDataFrameSchema {
     return PluginDataFrameSchema(
         f(columns(), nextName, selected, emptyList())
     )
