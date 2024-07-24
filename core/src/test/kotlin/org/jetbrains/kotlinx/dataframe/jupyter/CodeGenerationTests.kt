@@ -53,6 +53,22 @@ class CodeGenerationTests : DataFrameJupyterTest() {
     }
 
     @Test
+    fun `groupBy`() {
+        """
+            val groupBy = dataFrameOf("a")("1", "11", "2", "22").groupBy { expr { "a"<String>().length } named "k" }
+            groupBy.keys.k
+        """.checkCompilation()
+    }
+
+    @Test
+    fun `groupBy add`() {
+        """
+            val groupBy = dataFrameOf("a")("1", "11", "2", "22").groupBy { expr { "a"<String>().length } named "k" }.add("newCol") { 42 }
+            groupBy.aggregate { newCol into "newCol" }
+        """.checkCompilation()
+    }
+
+    @Test
     fun `interface without body compiled correctly`() {
         """
             val a = dataFrameOf("a")(1, 2, 3)

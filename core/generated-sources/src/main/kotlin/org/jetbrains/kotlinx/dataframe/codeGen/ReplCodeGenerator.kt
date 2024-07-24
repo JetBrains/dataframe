@@ -2,6 +2,7 @@ package org.jetbrains.dataframe.impl.codeGen
 
 import org.jetbrains.kotlinx.dataframe.AnyFrame
 import org.jetbrains.kotlinx.dataframe.AnyRow
+import org.jetbrains.kotlinx.dataframe.api.GroupBy
 import org.jetbrains.kotlinx.dataframe.codeGen.CodeWithConverter
 import org.jetbrains.kotlinx.dataframe.impl.codeGen.ReplCodeGeneratorImpl
 import org.jetbrains.kotlinx.jupyter.api.Code
@@ -13,14 +14,16 @@ internal interface ReplCodeGenerator {
     fun process(
         df: AnyFrame,
         property: KProperty<*>? = null,
-    ): CodeWithConverter
+    ): CodeWithConverter<*>
 
     fun process(
         row: AnyRow,
         property: KProperty<*>? = null,
-    ): CodeWithConverter
+    ): CodeWithConverter<*>
 
     fun process(markerClass: KClass<*>): Code
+
+    fun process(groupBy: GroupBy<*, *>): CodeWithConverter<*>
 
     companion object {
         fun create(): ReplCodeGenerator = ReplCodeGeneratorImpl()

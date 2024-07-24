@@ -33,6 +33,7 @@ import org.jetbrains.kotlinx.dataframe.api.asDataFrame
 import org.jetbrains.kotlinx.dataframe.api.columnsCount
 import org.jetbrains.kotlinx.dataframe.api.isColumnGroup
 import org.jetbrains.kotlinx.dataframe.api.name
+import org.jetbrains.kotlinx.dataframe.codeGen.CodeConverter
 import org.jetbrains.kotlinx.dataframe.codeGen.CodeWithConverter
 import org.jetbrains.kotlinx.dataframe.columns.ColumnGroup
 import org.jetbrains.kotlinx.dataframe.columns.ColumnReference
@@ -64,7 +65,7 @@ internal class Integration(
 
     val version = options["v"]
 
-    private fun KotlinKernelHost.execute(codeWithConverter: CodeWithConverter, argument: String): VariableName? {
+    private fun KotlinKernelHost.execute(codeWithConverter: CodeWithConverter<*>, argument: String): VariableName? {
         val code = codeWithConverter.with(argument)
         return if (code.isNotBlank()) {
             val result = execute(code)
@@ -75,7 +76,7 @@ internal class Integration(
     }
 
     private fun KotlinKernelHost.execute(
-        codeWithConverter: CodeWithConverter,
+        codeWithConverter: CodeWithConverter<*>,
         property: KProperty<*>,
         type: KType,
     ): VariableName? {
@@ -148,7 +149,7 @@ internal class Integration(
         codeGen: ReplCodeGenerator,
     ): VariableName? = if (col.isColumnGroup()) {
         val codeWithConverter = codeGen.process(col.asColumnGroup().asDataFrame(), property).let { c ->
-            CodeWithConverter(c.declarations) { c.converter("$it.asColumnGroup()") }
+            CodeWithConverter(c.declarations, converter = CodeConverter { c.converter("$it.asColumnGroup()") })
         }
         execute(
             codeWithConverter = codeWithConverter,
@@ -282,6 +283,7 @@ internal class Integration(
                     is AnyRow -> updateAnyRowVariable(instance, property, codeGen)
                     is AnyFrame -> updateAnyFrameVariable(instance, property, codeGen)
                     is ImportDataSchema -> updateImportDataSchemaVariable(instance, property)
+                    is GroupBy<*, *> -> execute(codeGen.process(instance), property, GroupBy::class.createStarProjectedType(false))
                     else -> error("${instance::class} should not be handled by Dataframe field handler")
                 }
             }
@@ -290,7 +292,8 @@ internal class Integration(
                     value is ColumnGroup<*> ||
                     value is AnyRow ||
                     value is AnyFrame ||
-                    value is ImportDataSchema
+                    value is ImportDataSchema ||
+                    value is GroupBy<*, *>
             }
         })
 

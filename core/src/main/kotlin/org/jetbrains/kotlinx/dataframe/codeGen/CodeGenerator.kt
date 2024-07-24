@@ -7,6 +7,7 @@ import org.jetbrains.kotlinx.dataframe.codeGen.Marker
 import org.jetbrains.kotlinx.dataframe.codeGen.MarkerVisibility
 import org.jetbrains.kotlinx.dataframe.codeGen.MarkersExtractor
 import org.jetbrains.kotlinx.dataframe.codeGen.NameNormalizer
+import org.jetbrains.kotlinx.dataframe.codeGen.ProvidedCodeConverter
 import org.jetbrains.kotlinx.dataframe.impl.codeGen.CodeGeneratorImpl
 import org.jetbrains.kotlinx.dataframe.impl.codeGen.FullyQualifiedNames
 import org.jetbrains.kotlinx.dataframe.impl.codeGen.ShortNames
@@ -22,7 +23,7 @@ public enum class InterfaceGenerationMode {
     None;
 }
 
-public data class CodeGenResult(val code: CodeWithConverter, val newMarkers: List<Marker>)
+public data class CodeGenResult(val code: CodeWithConverter<ProvidedCodeConverter>, val newMarkers: List<Marker>)
 
 public interface CodeGenerator : ExtensionsCodeGenerator {
 
@@ -44,7 +45,7 @@ public interface CodeGenerator : ExtensionsCodeGenerator {
         interfaceMode: InterfaceGenerationMode,
         extensionProperties: Boolean,
         readDfMethod: DefaultReadDfMethod? = null,
-    ): CodeWithConverter
+    ): CodeWithConverter<ProvidedCodeConverter>
 
     public companion object {
         public fun create(useFqNames: Boolean = true): CodeGenerator {
@@ -62,7 +63,7 @@ internal fun CodeGenerator.generate(
     markerClass: KClass<*>,
     interfaceMode: InterfaceGenerationMode,
     extensionProperties: Boolean,
-): CodeWithConverter = generate(
+): CodeWithConverter<ProvidedCodeConverter> = generate(
     MarkersExtractor.get(markerClass),
     interfaceMode,
     extensionProperties
@@ -71,4 +72,4 @@ internal fun CodeGenerator.generate(
 public inline fun <reified T> CodeGenerator.generate(
     interfaceMode: InterfaceGenerationMode,
     extensionProperties: Boolean,
-): CodeWithConverter = generate(T::class, interfaceMode, extensionProperties)
+): CodeWithConverter<ProvidedCodeConverter> = generate(T::class, interfaceMode, extensionProperties)

@@ -8,11 +8,14 @@ import org.jetbrains.kotlinx.dataframe.AnyRow
 import org.jetbrains.kotlinx.dataframe.DataFrame
 import org.jetbrains.kotlinx.dataframe.DataRow
 import org.jetbrains.kotlinx.dataframe.annotations.DataSchema
+import org.jetbrains.kotlinx.dataframe.api.GroupBy
 import org.jetbrains.kotlinx.dataframe.api.schema
+import org.jetbrains.kotlinx.dataframe.codeGen.CodeConverter
 import org.jetbrains.kotlinx.dataframe.codeGen.CodeWithConverter
 import org.jetbrains.kotlinx.dataframe.codeGen.Marker
 import org.jetbrains.kotlinx.dataframe.codeGen.MarkerVisibility
 import org.jetbrains.kotlinx.dataframe.codeGen.MarkersExtractor
+import org.jetbrains.kotlinx.dataframe.codeGen.ProvidedCodeConverter
 import org.jetbrains.kotlinx.dataframe.schema.DataFrameSchema
 import org.jetbrains.kotlinx.jupyter.api.Code
 import kotlin.reflect.KClass
@@ -44,9 +47,9 @@ internal class ReplCodeGeneratorImpl : ReplCodeGenerator {
             else -> null
         }
 
-    override fun process(row: AnyRow, property: KProperty<*>?): CodeWithConverter = process(row.df(), property)
+    override fun process(row: AnyRow, property: KProperty<*>?): CodeWithConverter<*> = process(row.df(), property)
 
-    override fun process(df: AnyFrame, property: KProperty<*>?): CodeWithConverter {
+    override fun process(df: AnyFrame, property: KProperty<*>?): CodeWithConverter<*> {
         var targetSchema = df.schema()
 
         if (property != null) {
@@ -78,11 +81,21 @@ internal class ReplCodeGeneratorImpl : ReplCodeGenerator {
         return generate(schema = targetSchema, name = markerInterfacePrefix, isOpen = true)
     }
 
+    override fun process(groupBy: GroupBy<*, *>): CodeWithConverter<*> {
+        val key = generate(groupBy.keys.schema(), markerInterfacePrefix + "Keys", isOpen = false)
+        val group = generate(groupBy.groups.schema.value, markerInterfacePrefix + "Groups", isOpen = false)
+
+        return CodeWithConverter(
+            key.declarations.plus("\n").plus(group.declarations),
+            converter = CodeConverter { "$it.cast<${key.converter.markerName}, ${group.converter.markerName}>()" }
+        )
+    }
+
     fun generate(
         schema: DataFrameSchema,
         name: String,
         isOpen: Boolean,
-    ): CodeWithConverter {
+    ): CodeWithConverter<ProvidedCodeConverter> {
         val result = generator.generate(
             schema = schema,
             name = name,

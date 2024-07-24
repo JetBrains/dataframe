@@ -42,6 +42,8 @@ public inline fun <reified T> AnyFrame.castTo(
 
 public fun <T> AnyRow.cast(): DataRow<T> = this as DataRow<T>
 
+public fun <T, G> GroupBy<*, *>.cast(): GroupBy<T, G> = this as GroupBy<T, G>
+
 public inline fun <reified T> AnyRow.cast(verify: Boolean = true): DataRow<T> = df().cast<T>(verify)[0]
 
 public fun <T> AnyCol.cast(): DataColumn<T> = this as DataColumn<T>

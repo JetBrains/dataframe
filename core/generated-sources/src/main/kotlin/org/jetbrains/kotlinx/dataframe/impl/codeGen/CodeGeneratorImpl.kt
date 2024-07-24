@@ -27,6 +27,7 @@ import org.jetbrains.kotlinx.dataframe.codeGen.IsolatedMarker
 import org.jetbrains.kotlinx.dataframe.codeGen.Marker
 import org.jetbrains.kotlinx.dataframe.codeGen.MarkerVisibility
 import org.jetbrains.kotlinx.dataframe.codeGen.NameNormalizer
+import org.jetbrains.kotlinx.dataframe.codeGen.ProvidedCodeConverter
 import org.jetbrains.kotlinx.dataframe.codeGen.SchemaProcessor
 import org.jetbrains.kotlinx.dataframe.codeGen.ValidFieldName
 import org.jetbrains.kotlinx.dataframe.codeGen.toNullable
@@ -43,7 +44,7 @@ internal fun Iterable<Marker>.filterRequiredForSchema(schema: DataFrameSchema) =
 internal val charsToQuote = """[ `(){}\[\].<>'"/|\\!?@:;%^&*#$-]""".toRegex()
 
 internal fun createCodeWithConverter(code: String, markerName: String) =
-    CodeWithConverter(code) { "$it.cast<$markerName>()" }
+    CodeWithConverter(code, ProvidedCodeConverter(markerName))
 
 private val letterCategories = setOf(
     CharCategory.UPPERCASE_LETTER,
@@ -357,7 +358,7 @@ internal open class ExtensionsCodeGeneratorImpl(
         return declarations.joinToString("\n")
     }
 
-    override fun generate(marker: IsolatedMarker): CodeWithConverter {
+    override fun generate(marker: IsolatedMarker): CodeWithConverter<*> {
         val code = generateExtensionProperties(marker)
         return createCodeWithConverter(code, marker.name)
     }
@@ -382,7 +383,7 @@ internal class CodeGeneratorImpl(typeRendering: TypeRenderingStrategy = FullyQua
         interfaceMode: InterfaceGenerationMode,
         extensionProperties: Boolean,
         readDfMethod: DefaultReadDfMethod?,
-    ): CodeWithConverter {
+    ): CodeWithConverter<ProvidedCodeConverter> {
         val code = when (interfaceMode) {
             NoFields, WithFields ->
                 generateInterface(
@@ -543,7 +544,7 @@ internal class CodeGeneratorImpl(typeRendering: TypeRenderingStrategy = FullyQua
     }
 }
 
-public fun CodeWithConverter.toStandaloneSnippet(packageName: String, additionalImports: List<String>): String =
+public fun CodeWithConverter<*>.toStandaloneSnippet(packageName: String, additionalImports: List<String>): String =
     declarations.toStandaloneSnippet(packageName, additionalImports)
 
 public fun Code.toStandaloneSnippet(packageName: String, additionalImports: List<String>): String =
