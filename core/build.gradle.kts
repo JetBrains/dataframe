@@ -374,12 +374,17 @@ tasks.withType<KotlinCompile> {
 
 tasks.test {
     maxHeapSize = "2048m"
+    maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
     extensions.configure(kotlinx.kover.api.KoverTaskExtension::class) {
         excludes = listOf(
             "org.jetbrains.kotlinx.dataframe.jupyter.*",
             "org.jetbrains.kotlinx.dataframe.jupyter.SampleNotebooksTests",
         )
     }
+}
+
+tasks.getByName<Test>("samplesTest") {
+    maxParallelForks = 1
 }
 
 tasks.processJupyterApiResources {

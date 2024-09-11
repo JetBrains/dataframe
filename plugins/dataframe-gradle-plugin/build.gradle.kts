@@ -126,6 +126,7 @@ val integrationTestTask = task<Test>("integrationTest") {
     dependsOn(":core:publishCorePublicationToMavenLocal")
     description = "Runs integration tests."
     group = "verification"
+    maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
 
     testClassesDirs = sourceSets["integrationTest"].output.classesDirs
     classpath = sourceSets["integrationTest"].runtimeClasspath
