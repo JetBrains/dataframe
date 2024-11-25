@@ -6,6 +6,9 @@
 package org.jetbrains.kotlinx.dataframe.plugin.utils
 
 import org.jetbrains.kotlin.builtins.StandardNames
+import org.jetbrains.kotlin.fir.FirSession
+import org.jetbrains.kotlin.fir.analysis.checkers.fullyExpandedClassId
+import org.jetbrains.kotlin.fir.types.ConeKotlinType
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
@@ -72,3 +75,6 @@ private fun KClass<*>.classId(): ClassId {
     val className = fqName.substringAfterLast(".")
     return ClassId(FqName(packageFqName), Name.identifier(className))
 }
+
+fun ConeKotlinType.isDataFrame(session: FirSession) = fullyExpandedClassId(session) == Names.DF_CLASS_ID
+fun ConeKotlinType.isGroupBy(session: FirSession) = fullyExpandedClassId(session) == Names.GROUP_BY_CLASS_ID
