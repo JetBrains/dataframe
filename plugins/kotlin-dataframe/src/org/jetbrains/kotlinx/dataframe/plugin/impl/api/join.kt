@@ -2,18 +2,23 @@
 
 package org.jetbrains.kotlinx.dataframe.plugin.impl.api
 
+import org.jetbrains.kotlinx.dataframe.api.JoinType
 import org.jetbrains.kotlinx.dataframe.plugin.impl.AbstractInterpreter
 import org.jetbrains.kotlinx.dataframe.plugin.impl.Arguments
 import org.jetbrains.kotlinx.dataframe.impl.ColumnNameGenerator
 import org.jetbrains.kotlinx.dataframe.plugin.impl.PluginDataFrameSchema
+import org.jetbrains.kotlinx.dataframe.plugin.impl.Present
 import org.jetbrains.kotlinx.dataframe.plugin.impl.SimpleCol
 import org.jetbrains.kotlinx.dataframe.plugin.impl.SimpleColumnGroup
 import org.jetbrains.kotlinx.dataframe.plugin.impl.dataFrame
+import org.jetbrains.kotlinx.dataframe.plugin.impl.enum
+import org.jetbrains.kotlinx.dataframe.plugin.impl.makeNullable
 
 internal class Join0 : AbstractInterpreter<PluginDataFrameSchema>() {
     val Arguments.receiver: PluginDataFrameSchema by dataFrame()
     val Arguments.other: PluginDataFrameSchema by dataFrame()
     val Arguments.selector: ColumnMatchApproximation by arg()
+    val Arguments.type: JoinType by enum(defaultValue = Present(JoinType.Inner))
 
     override fun Arguments.interpret(): PluginDataFrameSchema {
         val nameGenerator = ColumnNameGenerator()
@@ -44,9 +49,28 @@ internal class Join0 : AbstractInterpreter<PluginDataFrameSchema>() {
             }
         }
 
+        // remove impl merged groups?
         val columns = buildList {
-            addColumns(left)
-            addColumns(right.filterNot { it is SimpleColumnGroup && it.name() in mergedGroups })
+            when (type) {
+                JoinType.Inner -> {
+                    addColumns(left)
+                    addColumns(right.filterNot { it is SimpleColumnGroup && it.name() in mergedGroups })
+                }
+                JoinType.Left -> {
+                    addColumns(left)
+                    addColumns(right.filterNot { it is SimpleColumnGroup && it.name() in mergedGroups }.map { makeNullable(it) })
+                }
+                JoinType.Right -> {
+                    addColumns(left.filterNot { it is SimpleColumnGroup && it.name() in mergedGroups }.map { makeNullable(it) })
+                    addColumns(right)
+                }
+                JoinType.Full -> {
+                    addColumns(left.map { makeNullable(it) })
+                    addColumns(right.filterNot { it is SimpleColumnGroup && it.name() in mergedGroups }.map { makeNullable(it) })
+                }
+                JoinType.Filter -> addColumns(left)
+                JoinType.Exclude -> addColumns(left)
+            }
         }
         return PluginDataFrameSchema(columns)
     }
