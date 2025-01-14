@@ -19,6 +19,7 @@ import kotlin.reflect.KType
 
 internal val anyRowType = createTypeWithArgument<AnyRow>()
 
+@org.jetbrains.annotations.Debug.Renderer(text = "\" ColumnGroup \"")
 internal open class ColumnGroupImpl<T>(private val name: String, df: DataFrame<T>) :
     DataFrameImpl<T>(df.columns(), df.nrow),
     DataColumnInternal<DataRow<T>>,

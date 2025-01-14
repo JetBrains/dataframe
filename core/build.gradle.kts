@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.serialization.core)
     implementation(libs.serialization.json)
     implementation(libs.fastDoubleParser)
+    implementation("org.jetbrains:annotations:23.0.0")
 
     api(libs.kotlin.datetimeJvm)
     implementation(libs.kotlinpoet)

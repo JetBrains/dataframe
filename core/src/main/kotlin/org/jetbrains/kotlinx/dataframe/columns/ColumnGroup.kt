@@ -27,6 +27,7 @@ import kotlin.reflect.KProperty
  * @param T Schema marker. See [DataFrame] for details.
  */
 @HasSchema(schemaArg = 0)
+@org.jetbrains.annotations.Debug.Renderer(text = "\" ColumnGroup \"")
 public interface ColumnGroup<out T> :
     BaseColumn<DataRow<T>>,
     DataFrame<T> {

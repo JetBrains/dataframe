@@ -32,6 +32,10 @@ import kotlin.reflect.KType
  * @param T Schema marker. It identifies column schema and is used to generate schema-specific extension properties for typed data access. It is covariant, so `DataFrame<A>` is assignable to variable of type `DataFrame<B>` if `A` is a subtype of `B`.
  */
 @HasSchema(schemaArg = 0)
+@org.jetbrains.annotations.Debug.Renderer(
+    text = "\"DataFrame \" + org.jetbrains.kotlinx.dataframe.DataFrameKt.size(this)",
+    childrenArray = "this.columns1().toArray()",
+)
 public interface DataFrame<out T> :
     Aggregatable<T>,
     ColumnsContainer<T> {
@@ -68,6 +72,8 @@ public interface DataFrame<out T> :
     public fun rowsCount(): Int
 
     public operator fun iterator(): Iterator<DataRow<T>> = rows().iterator()
+
+    public fun rowsList(): List<DataRow<T>> = rows().toList()
 
     // endregion
 

@@ -16,6 +16,7 @@ import kotlin.reflect.KProperty
  *
  * @param T Schema marker. See [DataFrame] for details
  */
+@org.jetbrains.annotations.Debug.Renderer(childrenArray = "this.values().toArray()")
 public interface DataRow<out T> {
 
     public fun index(): Int
