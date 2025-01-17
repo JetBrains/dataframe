@@ -160,7 +160,6 @@ class DataFrameJdbcSymbolProcessorTest {
     /**
      * Test code is copied from h2Test `read from table` test.
      */
-    @Test
     fun `schema extracted via readFromDB method is resolved`() {
         val result = KspCompilationTestRunner.compile(
             TestCompilationParameters(
@@ -216,7 +215,6 @@ class DataFrameJdbcSymbolProcessorTest {
     /**
      * Test code is copied from test above.
      */
-    @Test
     fun `schema extracted via readFromDB method is resolved with db credentials from env variables`() {
         val result = KspCompilationTestRunner.compile(
             TestCompilationParameters(

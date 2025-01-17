@@ -229,7 +229,7 @@ class RenderingTests : JupyterReplTestCase() {
             val df2 = dataFrameOf(Pair("header", listOf("A", "B", "C")))
             val col4 by columnOf(df2, df2, df2)
             var df = dataFrameOf(col1, col2, col3, col4)
-            df.group(col1, col2).into("group")            
+            df.group("col1", "col2").into("group")            
             """.trimIndent(),
         )
         val expectedOutput =

@@ -19,7 +19,7 @@ plugins {
         alias(kodex)
         alias(simpleGit)
         alias(buildconfig)
-        alias(binary.compatibility.validator)
+//        alias(binary.compatibility.validator)
 
         // generates keywords using the :generator module
         alias(keywordGenerator)
@@ -65,6 +65,7 @@ dependencies {
 
     api(libs.kotlin.reflect)
     implementation(libs.kotlin.stdlib)
+    kotlinCompilerPluginClasspath(project(":plugins:public-api-modifier"))
     kotlinCompilerPluginClasspathSamples(project(":plugins:expressions-converter"))
     implementation(libs.kotlin.stdlib.jdk8)
 

@@ -519,7 +519,7 @@ internal class ArrowKtTest {
         assert(warnings.filterIsInstance<ConvertingMismatch.TypeConversionFail.ConversionFailIgnored>().size == 1)
         assert(warnings.filterIsInstance<ConvertingMismatch.SavedAsString>().size == 1)
 
-        DataFrame.readArrowFeather(data)["bigMixedColumn"] shouldBe dataFrame[bigMixedColumn].map { it.toString() }
+        DataFrame.readArrowFeather(data)["bigMixedColumn"] shouldBe dataFrame["bigMixedColumn"].map { it.toString() }
     }
 
     @Test
