@@ -4,6 +4,7 @@ import org.jetbrains.kotlinx.dataframe.AnyColumnGroupAccessor
 import org.jetbrains.kotlinx.dataframe.ColumnGroupReference
 import org.jetbrains.kotlinx.dataframe.DataFrame
 import org.jetbrains.kotlinx.dataframe.DataRow
+import org.jetbrains.kotlinx.dataframe.annotations.AccessApiOverload
 import org.jetbrains.kotlinx.dataframe.api.ColColumnsSelectionDsl.Grammar
 import org.jetbrains.kotlinx.dataframe.api.ColColumnsSelectionDsl.Grammar.ColumnGroupName
 import org.jetbrains.kotlinx.dataframe.api.ColColumnsSelectionDsl.Grammar.ColumnSetName
@@ -163,11 +164,13 @@ public interface ColColumnsSelectionDsl<out _UNUSED> {
      * {@set [CommonColDocs.Note] NOTE: This overload is an identity function and can be omitted.}
      */
     @Deprecated(IDENTITY_FUNCTION, ReplaceWith(COL_REPLACE))
+    @AccessApiOverload
     public fun <C> col(col: ColumnAccessor<C>): ColumnAccessor<C> = col
 
     /**
      * @include [ColReferenceDocs] {@set [CommonColDocs.ReceiverArg] myColumnGroup.}
      */
+    @AccessApiOverload
     public fun <C> SingleColumn<DataRow<*>>.col(col: ColumnAccessor<C>): SingleColumn<C> =
         this.ensureIsColumnGroup().transformSingle {
             val child = it.getCol(col)
@@ -178,24 +181,28 @@ public interface ColColumnsSelectionDsl<out _UNUSED> {
     /**
      * @include [ColReferenceDocs] {@set [CommonColDocs.ReceiverArg] myColumnGroup.}
      */
+    @AccessApiOverload
     public fun <C> AnyColumnGroupAccessor.col(col: ColumnAccessor<C>): ColumnAccessor<C> =
         this.ensureIsColumnGroup().column(col.path())
 
     /**
      * @include [ColReferenceDocs] {@set [CommonColDocs.ReceiverArg] "myColumnGroup".}
      */
+    @AccessApiOverload
     public fun <C> String.col(col: ColumnAccessor<C>): ColumnAccessor<C> =
         columnGroup(this).ensureIsColumnGroup().column(col.path())
 
     /**
      * @include [ColReferenceDocs] {@set [CommonColDocs.ReceiverArg] Type::myColumnGroup.}
      */
+    @AccessApiOverload
     public fun <C> KProperty<*>.col(col: ColumnAccessor<C>): ColumnAccessor<C> =
         columnGroup(this).ensureIsColumnGroup().column(col.path())
 
     /**
      * @include [ColReferenceDocs] {@set [CommonColDocs.ReceiverArg] "pathTo"["myColumnGroup"].}
      */
+    @AccessApiOverload
     public fun <C> ColumnPath.col(col: ColumnAccessor<C>): ColumnAccessor<C> =
         columnGroup(this).ensureIsColumnGroup().column(col.path())
 
@@ -414,34 +421,40 @@ public interface ColColumnsSelectionDsl<out _UNUSED> {
     /**
      * @include [ColKPropertyDocs] {@set [CommonColDocs.ReceiverArg]}
      */
+    @AccessApiOverload
     public fun <C> col(property: KProperty<C>): SingleColumn<C> = column(property)
 
     /**
      * @include [ColKPropertyDocs] {@set [CommonColDocs.ReceiverArg] myColumnGroup.}
      */
+    @AccessApiOverload
     public fun <C> SingleColumn<DataRow<*>>.col(property: KProperty<C>): SingleColumn<C> = col<C>(property.name)
 
     /**
      * @include [ColKPropertyDocs] {@set [CommonColDocs.ReceiverArg] myColumnGroup.}
      */
+    @AccessApiOverload
     public fun <C> AnyColumnGroupAccessor.col(property: KProperty<C>): ColumnAccessor<C> =
         this.ensureIsColumnGroup().column(property)
 
     /**
      * @include [ColKPropertyDocs] {@set [CommonColDocs.ReceiverArg] "myColumnGroup".}
      */
+    @AccessApiOverload
     public fun <C> String.col(property: KProperty<C>): ColumnAccessor<C> =
         columnGroup(this).ensureIsColumnGroup().column(property)
 
     /**
      * @include [ColKPropertyDocs] {@set [CommonColDocs.ReceiverArg] Type::myColumnGroup.}
      */
+    @AccessApiOverload
     public fun <C> KProperty<*>.col(property: KProperty<C>): ColumnAccessor<C> =
         columnGroup(this).ensureIsColumnGroup().column(property)
 
     /**
      * @include [ColKPropertyDocs] {@set [CommonColDocs.ReceiverArg] "pathTo"["myColumnGroup"].}
      */
+    @AccessApiOverload
     public fun <C> ColumnPath.col(property: KProperty<C>): ColumnAccessor<C> =
         columnGroup(this).ensureIsColumnGroup().column(property)
 

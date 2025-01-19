@@ -386,12 +386,14 @@ public interface ColsColumnsSelectionDsl<out _UNUSED> {
     private interface ColumnsSelectionDslColsVarargColumnReferenceDocs
 
     /** @include [ColumnsSelectionDslColsVarargColumnReferenceDocs] */
+    @AccessApiOverload
     public fun <C> ColumnsSelectionDsl<*>.cols(
         firstCol: ColumnReference<C>,
         vararg otherCols: ColumnReference<C>,
     ): ColumnSet<C> = asSingleColumn().cols(firstCol, *otherCols)
 
     /** @include [ColumnsSelectionDslColsVarargColumnReferenceDocs] */
+    @AccessApiOverload
     public operator fun <C> ColumnsSelectionDsl<*>.get(
         firstCol: ColumnReference<C>,
         vararg otherCols: ColumnReference<C>,
@@ -408,6 +410,7 @@ public interface ColsColumnsSelectionDsl<out _UNUSED> {
     private interface SingleColumnColsVarargColumnReferenceDocs
 
     /** @include [SingleColumnColsVarargColumnReferenceDocs] */
+    @AccessApiOverload
     public fun <C> SingleColumn<DataRow<*>>.cols(
         firstCol: ColumnReference<C>,
         vararg otherCols: ColumnReference<C>,
@@ -416,6 +419,7 @@ public interface ColsColumnsSelectionDsl<out _UNUSED> {
     /**
      * @include [SingleColumnColsVarargColumnReferenceDocs]
      */
+    @AccessApiOverload
     public operator fun <C> SingleColumn<DataRow<*>>.get(
         firstCol: ColumnReference<C>,
         vararg otherCols: ColumnReference<C>,
@@ -429,13 +433,16 @@ public interface ColsColumnsSelectionDsl<out _UNUSED> {
      *
      * `df.`[`select`][DataFrame.select]` { "myColumnGroup"`[`[`][String.cols]`columnA, columnB`[`]`][String.cols]` }`
      */
+    @AccessApiOverload
     private interface StringColsVarargColumnReferenceDocs
 
     /** @include [StringColsVarargColumnReferenceDocs] */
+    @AccessApiOverload
     public fun <C> String.cols(firstCol: ColumnReference<C>, vararg otherCols: ColumnReference<C>): ColumnSet<C> =
         columnGroup(this).cols(firstCol, *otherCols)
 
     /** @include [StringColsVarargColumnReferenceDocs] */
+    @AccessApiOverload
     public operator fun <C> String.get(
         firstCol: ColumnReference<C>,
         vararg otherCols: ColumnReference<C>,
@@ -449,15 +456,18 @@ public interface ColsColumnsSelectionDsl<out _UNUSED> {
      *
      * `df.`[`select`][DataFrame.select]` { DataSchemaType::myColumnGroup`[`[`][KProperty.cols]`"pathTo"["colA"], "pathTo"["colB"]`[`]`][KProperty.cols]` }`
      */
+    @AccessApiOverload
     private interface KPropertyColsVarargColumnReferenceDocs
 
     /** @include [KPropertyColsVarargColumnReferenceDocs] */
+    @AccessApiOverload
     public fun <C> KProperty<*>.cols(
         firstCol: ColumnReference<C>,
         vararg otherCols: ColumnReference<C>,
     ): ColumnSet<C> = columnGroup(this).cols(firstCol, *otherCols)
 
     /** @include [KPropertyColsVarargColumnReferenceDocs] */
+    @AccessApiOverload
     public operator fun <C> KProperty<*>.get(
         firstCol: ColumnReference<C>,
         vararg otherCols: ColumnReference<C>,
@@ -473,13 +483,16 @@ public interface ColsColumnsSelectionDsl<out _UNUSED> {
      *
      * `df.`[`select`][DataFrame.select]` { "pathTo"["columnGroup"]`[`[`][ColumnPath.cols]`columnA, columnB`[`]`][ColumnPath.cols]` }`
      */
+    @AccessApiOverload
     private interface ColumnPathColsVarargColumnReferenceDocs
 
     /** @include [ColumnPathColsVarargColumnReferenceDocs] */
+    @AccessApiOverload
     public fun <C> ColumnPath.cols(firstCol: ColumnReference<C>, vararg otherCols: ColumnReference<C>): ColumnSet<C> =
         columnGroup(this).cols(firstCol, *otherCols)
 
     /** @include [ColumnPathColsVarargColumnReferenceDocs] */
+    @AccessApiOverload
     public operator fun <C> ColumnPath.get(
         firstCol: ColumnReference<C>,
         vararg otherCols: ColumnReference<C>,
@@ -762,13 +775,16 @@ public interface ColsColumnsSelectionDsl<out _UNUSED> {
      *
      * `df.`[`select`][DataFrame.select]` { this`[`[`][ColumnsSelectionDsl.cols]`Type::colA, Type::colB`[`]`][ColumnsSelectionDsl.cols]` }`
      */
+    @AccessApiOverload
     private interface ColumnsSelectionDslColsVarargKPropertyDocs
 
     /** @include [ColumnsSelectionDslColsVarargKPropertyDocs] */
+    @AccessApiOverload
     public fun <C> ColumnsSelectionDsl<*>.cols(firstCol: KProperty<C>, vararg otherCols: KProperty<C>): ColumnSet<C> =
         this.asSingleColumn().cols(firstCol, *otherCols)
 
     /** @include [ColumnsSelectionDslColsVarargKPropertyDocs] */
+    @AccessApiOverload
     public operator fun <C> ColumnsSelectionDsl<*>.get(
         firstCol: KProperty<C>,
         vararg otherCols: KProperty<C>,
@@ -785,12 +801,14 @@ public interface ColsColumnsSelectionDsl<out _UNUSED> {
     private interface SingleColumnColsVarargKPropertyDocs
 
     /** @include [SingleColumnColsVarargKPropertyDocs] */
+    @AccessApiOverload
     public fun <C> SingleColumn<DataRow<*>>.cols(
         firstCol: KProperty<C>,
         vararg otherCols: KProperty<C>,
     ): ColumnSet<C> = colsInternal(listOf(firstCol, *otherCols).map { pathOf(it.name) }).cast()
 
     /** @include [SingleColumnColsVarargKPropertyDocs] */
+    @AccessApiOverload
     public operator fun <C> SingleColumn<DataRow<*>>.get(
         firstCol: KProperty<C>,
         vararg otherCols: KProperty<C>,
@@ -807,10 +825,12 @@ public interface ColsColumnsSelectionDsl<out _UNUSED> {
     private interface StringColsVarargKPropertyDocs
 
     /** @include [StringColsVarargKPropertyDocs] */
+    @AccessApiOverload
     public fun <C> String.cols(firstCol: KProperty<C>, vararg otherCols: KProperty<C>): ColumnSet<C> =
         columnGroup(this).cols(firstCol, *otherCols)
 
     /** @include [StringColsVarargKPropertyDocs] */
+    @AccessApiOverload
     public operator fun <C> String.get(firstCol: KProperty<C>, vararg otherCols: KProperty<C>): ColumnSet<C> =
         cols(firstCol, *otherCols)
 
@@ -825,10 +845,12 @@ public interface ColsColumnsSelectionDsl<out _UNUSED> {
     private interface KPropertyColsVarargKPropertyDocs
 
     /** @include [KPropertyColsVarargKPropertyDocs] */
+    @AccessApiOverload
     public fun <C> KProperty<*>.cols(firstCol: KProperty<C>, vararg otherCols: KProperty<C>): ColumnSet<C> =
         columnGroup(this).cols(firstCol, *otherCols)
 
     /** @include [KPropertyColsVarargKPropertyDocs] */
+    @AccessApiOverload
     public operator fun <C> KProperty<*>.get(firstCol: KProperty<C>, vararg otherCols: KProperty<C>): ColumnSet<C> =
         cols(firstCol, *otherCols)
 
@@ -840,13 +862,16 @@ public interface ColsColumnsSelectionDsl<out _UNUSED> {
      *
      * `df.`[`select`][DataFrame.select]` { "pathTo"["columnGroup"]`[`[`][ColumnPath.cols]`Type::colA, Type::colB`[`]`][ColumnPath.cols]` }`
      */
+    @AccessApiOverload
     private interface ColumnPathColsVarargKPropertyDocs
 
     /** @include [ColumnPathColsVarargKPropertyDocs] */
+    @AccessApiOverload
     public fun <C> ColumnPath.cols(firstCol: KProperty<C>, vararg otherCols: KProperty<C>): ColumnSet<C> =
         columnGroup(this).cols(firstCol, *otherCols)
 
     /** @include [ColumnPathColsVarargKPropertyDocs] */
+    @AccessApiOverload
     public operator fun <C> ColumnPath.get(firstCol: KProperty<C>, vararg otherCols: KProperty<C>): ColumnSet<C> =
         cols(firstCol, *otherCols)
 

@@ -2,6 +2,7 @@ package org.jetbrains.kotlinx.dataframe.api
 
 import org.jetbrains.kotlinx.dataframe.AnyColumnReference
 import org.jetbrains.kotlinx.dataframe.DataFrame
+import org.jetbrains.kotlinx.dataframe.annotations.AccessApiOverload
 import org.jetbrains.kotlinx.dataframe.api.ColumnRangeColumnsSelectionDsl.Grammar
 import org.jetbrains.kotlinx.dataframe.columns.ColumnReference
 import org.jetbrains.kotlinx.dataframe.columns.ColumnSet
@@ -82,6 +83,7 @@ public interface ColumnRangeColumnsSelectionDsl {
      * @include [CommonRangeOfColumnsDocs]
      * {@set [CommonRangeOfColumnsDocs.Example] `"fromColumn"`[`..`][String.rangeTo]`Type::toColumn`}
      */
+    @AccessApiOverload
     public operator fun String.rangeTo(endInclusive: KProperty<*>): ColumnSet<*> =
         toColumnAccessor().rangeTo(endInclusive.toColumnAccessor())
 
@@ -89,6 +91,7 @@ public interface ColumnRangeColumnsSelectionDsl {
      * @include [CommonRangeOfColumnsDocs]
      * {@set [CommonRangeOfColumnsDocs.Example] `"fromColumn"`[`..`][String.rangeTo]`toColumn`}
      */
+    @AccessApiOverload
     public operator fun String.rangeTo(endInclusive: AnyColumnReference): ColumnSet<*> =
         toColumnAccessor().rangeTo(endInclusive)
 
@@ -103,6 +106,7 @@ public interface ColumnRangeColumnsSelectionDsl {
      * @include [CommonRangeOfColumnsDocs]
      * {@set [CommonRangeOfColumnsDocs.Example] `Type::fromColumn`[`..`][KProperty.rangeTo]`Type::toColumn`}
      */
+    @AccessApiOverload
     public operator fun KProperty<*>.rangeTo(endInclusive: KProperty<*>): ColumnSet<*> =
         toColumnAccessor().rangeTo(endInclusive.toColumnAccessor())
 
@@ -110,6 +114,7 @@ public interface ColumnRangeColumnsSelectionDsl {
      * @include [CommonRangeOfColumnsDocs]
      * {@set [CommonRangeOfColumnsDocs.Example] `Type::fromColumn`[`..`][KProperty.rangeTo]`toColumn`}
      */
+    @AccessApiOverload
     public operator fun KProperty<*>.rangeTo(endInclusive: AnyColumnReference): ColumnSet<*> =
         toColumnAccessor().rangeTo(endInclusive)
 
@@ -124,6 +129,7 @@ public interface ColumnRangeColumnsSelectionDsl {
      * @include [CommonRangeOfColumnsDocs]
      * {@set [CommonRangeOfColumnsDocs.Example] `fromColumn`[`..`][ColumnReference.rangeTo]`Type::toColumn`}
      */
+    @AccessApiOverload
     public operator fun AnyColumnReference.rangeTo(endInclusive: KProperty<*>): ColumnSet<*> =
         rangeTo(endInclusive.toColumnAccessor())
 
@@ -131,6 +137,7 @@ public interface ColumnRangeColumnsSelectionDsl {
      * @include [CommonRangeOfColumnsDocs]
      * {@set [CommonRangeOfColumnsDocs.Example] `fromColumn`[`..`][ColumnReference.rangeTo]`toColumn`}
      */
+    @AccessApiOverload
     public operator fun AnyColumnReference.rangeTo(endInclusive: AnyColumnReference): ColumnSet<*> =
         createColumnSet { context ->
             val startPath = this@rangeTo.resolveSingle(context)!!.path
