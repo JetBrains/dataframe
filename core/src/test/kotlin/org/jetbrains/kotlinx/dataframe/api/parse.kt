@@ -32,6 +32,22 @@ import java.time.Duration as JavaDuration
 import java.time.Instant as JavaInstant
 
 class ParseTests {
+
+    @Test
+    fun `parse chars to string`() {
+        val char = columnOf('a', 'b', 'c')
+        char.parse() shouldBe columnOf("a", "b", "c")
+        char.tryParse() shouldBe columnOf("a", "b", "c")
+        char.parse().cast<String>().parse() shouldBe char
+    }
+
+    @Test
+    fun `parse chars to int`() {
+        val char = columnOf('1', '2', '3')
+        char.parse() shouldBe columnOf(1, 2, 3)
+        char.tryParse() shouldBe columnOf(1, 2, 3)
+    }
+
     @Test
     fun parseDate() {
         val currentLocale = Locale.getDefault()

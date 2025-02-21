@@ -52,7 +52,7 @@ public class ConverterScope(public val fromType: KType, public val toSchema: Col
  * df.convertTo<SomeSchema> {
  *     // defines how to convert Int? -> String
  *     convert<Int?>().with { it?.toString() ?: "No input given" }
- *     // defines how to convert String -> SomeType
+ *     // defines how to convert String -> SomeType (and Char.toString() -> SomeType)
  *     parser { SomeType(it) }
  *     // fill missing column `sum` with expression `a+b`
  *     fill { sum }.with { a + b }
@@ -102,6 +102,10 @@ public fun <T, C> ConvertToFill<T, C>.with(expr: RowExpression<T, C>) {
 
 /**
  * Defines how to convert `String` values into given type [C].
+ *
+ * This method is a shortcut for `convert<String>().with { }`.
+ *
+ * If no converter is defined for `Char` values, this converter will be used for them as well.
  */
 public inline fun <reified C> ConvertSchemaDsl<*>.parser(noinline parser: (String) -> C): Unit =
     convert<String>().with(parser)

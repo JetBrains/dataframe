@@ -51,6 +51,38 @@ class ConvertToTests {
         df.convertTo<Schema> { parser { A(it.toInt()) } }
             .single()
             .a.value shouldBe 1
+
+        // shortcut for:
+        df.convertTo<Schema> { convert<String>().with { A(it.toInt()) } }
+            .single()
+            .a.value shouldBe 1
+    }
+
+    @Test
+    fun `convert from char with parser`() {
+        val df = dataFrameOf("a")('1')
+
+        shouldThrow<TypeConverterNotFoundException> {
+            df.convertTo<Schema>()
+        }
+
+        // Char -> String -> Target
+        df.convertTo<Schema> { parser { A(it.toInt()) } }
+            .single()
+            .a.value shouldBe 1
+
+        // shortcut for:
+        df.convertTo<Schema> { convert<String>().with { A(it.toInt()) } }
+            .single()
+            .a.value shouldBe 1
+
+        // Char -> Target
+        df.convertTo<Schema> {
+            parser<A> { error("should not be triggered if convert<Char>() is present") }
+            convert<String>().with<_, A> { error("should not be triggered if convert<Char>() is present") }
+
+            convert<Char>().with { A(it.digitToInt()) }
+        }.single().a.value shouldBe 1
     }
 
     @Test
