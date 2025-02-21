@@ -19,7 +19,7 @@ import org.jetbrains.kotlinx.dataframe.impl.aggregation.modes.aggregateOf
 import org.jetbrains.kotlinx.dataframe.impl.aggregation.modes.of
 import org.jetbrains.kotlinx.dataframe.impl.columns.toComparableColumns
 import org.jetbrains.kotlinx.dataframe.impl.suggestIfNull
-import org.jetbrains.kotlinx.dataframe.math.percentileOrNull
+import org.jetbrains.kotlinx.dataframe.math.percentile
 import kotlin.reflect.KProperty
 
 // region DataColumn
@@ -53,7 +53,7 @@ public fun AnyRow.rowPercentile(percentile: Double): Any =
     rowPercentileOrNull(percentile).suggestIfNull("rowPercentile")
 
 public inline fun <reified T : Comparable<T>> AnyRow.rowPercentileOfOrNull(percentile: Double): T? =
-    valuesOf<T>().percentileOrNull(percentile)
+    valuesOf<T>().percentile(percentile)
 
 public inline fun <reified T : Comparable<T>> AnyRow.rowPercentileOf(percentile: Double): T =
     rowPercentileOfOrNull<T>(percentile).suggestIfNull("rowPercentileOf")

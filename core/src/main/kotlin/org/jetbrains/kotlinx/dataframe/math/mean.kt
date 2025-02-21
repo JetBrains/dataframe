@@ -43,7 +43,7 @@ internal fun <T : Number> Sequence<T>.mean(type: KType, skipNA: Boolean = skipNA
     }
 }
 
-public fun Sequence<Double>.mean(skipNA: Boolean = skipNA_default): Double {
+internal fun Sequence<Double>.mean(skipNA: Boolean = skipNA_default): Double {
     var count = 0
     var sum: Double = 0.toDouble()
     for (element in this) {
@@ -61,7 +61,7 @@ public fun Sequence<Double>.mean(skipNA: Boolean = skipNA_default): Double {
 }
 
 @JvmName("meanFloat")
-public fun Sequence<Float>.mean(skipNA: Boolean = skipNA_default): Double {
+internal fun Sequence<Float>.mean(skipNA: Boolean = skipNA_default): Double {
     var count = 0
     var sum: Double = 0.toDouble()
     for (element in this) {
@@ -79,13 +79,13 @@ public fun Sequence<Float>.mean(skipNA: Boolean = skipNA_default): Double {
 }
 
 @JvmName("doubleMean")
-public fun Iterable<Double>.mean(skipNA: Boolean = skipNA_default): Double = asSequence().mean(skipNA)
+internal fun Iterable<Double>.mean(skipNA: Boolean = skipNA_default): Double = asSequence().mean(skipNA)
 
 @JvmName("floatMean")
-public fun Iterable<Float>.mean(skipNA: Boolean = skipNA_default): Double = asSequence().mean(skipNA)
+internal fun Iterable<Float>.mean(skipNA: Boolean = skipNA_default): Double = asSequence().mean(skipNA)
 
 @JvmName("intMean")
-public fun Iterable<Int>.mean(): Double =
+internal fun Iterable<Int>.mean(): Double =
     if (this is Collection) {
         if (size > 0) sumOf { it.toDouble() } / size else Double.NaN
     } else {
@@ -98,7 +98,7 @@ public fun Iterable<Int>.mean(): Double =
     }
 
 @JvmName("shortMean")
-public fun Iterable<Short>.mean(): Double =
+internal fun Iterable<Short>.mean(): Double =
     if (this is Collection) {
         if (size > 0) sumOf { it.toDouble() } / size else Double.NaN
     } else {
@@ -111,7 +111,7 @@ public fun Iterable<Short>.mean(): Double =
     }
 
 @JvmName("byteMean")
-public fun Iterable<Byte>.mean(): Double =
+internal fun Iterable<Byte>.mean(): Double =
     if (this is Collection) {
         if (size > 0) sumOf { it.toDouble() } / size else Double.NaN
     } else {
@@ -124,7 +124,7 @@ public fun Iterable<Byte>.mean(): Double =
     }
 
 @JvmName("longMean")
-public fun Iterable<Long>.mean(): Double =
+internal fun Iterable<Long>.mean(): Double =
     if (this is Collection) {
         if (size > 0) sumOf { it.toDouble() } / size else Double.NaN
     } else {
@@ -138,7 +138,7 @@ public fun Iterable<Long>.mean(): Double =
 
 // TODO result is Double, but should be BigDecimal, Issue #558
 @JvmName("bigIntegerMean")
-public fun Iterable<BigInteger>.mean(): Double =
+internal fun Iterable<BigInteger>.mean(): Double =
     if (this is Collection) {
         if (size > 0) sumOf { it.toDouble() } / size else Double.NaN
     } else {
@@ -152,7 +152,7 @@ public fun Iterable<BigInteger>.mean(): Double =
 
 // TODO result is Double, but should be BigDecimal, Issue #558
 @JvmName("bigDecimalMean")
-public fun Iterable<BigDecimal>.mean(): Double =
+internal fun Iterable<BigDecimal>.mean(): Double =
     if (this is Collection) {
         if (size > 0) sum().toDouble() / size else Double.NaN
     } else {

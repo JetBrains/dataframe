@@ -8,6 +8,7 @@ import java.math.BigInteger
 import kotlin.reflect.KType
 import kotlin.reflect.full.withNullability
 
+@Suppress("UNCHECKED_CAST")
 @PublishedApi
 internal fun <T : Number> Iterable<T?>.std(
     type: KType,
@@ -35,21 +36,21 @@ internal fun <T : Number> Iterable<T?>.std(
 }
 
 @JvmName("doubleStd")
-public fun Iterable<Double>.std(skipNA: Boolean = skipNA_default, ddof: Int = ddof_default): Double =
+internal fun Iterable<Double>.std(skipNA: Boolean = skipNA_default, ddof: Int = ddof_default): Double =
     varianceAndMean(skipNA)?.std(ddof) ?: Double.NaN
 
 @JvmName("floatStd")
-public fun Iterable<Float>.std(skipNA: Boolean = skipNA_default, ddof: Int = ddof_default): Double =
+internal fun Iterable<Float>.std(skipNA: Boolean = skipNA_default, ddof: Int = ddof_default): Double =
     varianceAndMean(skipNA)?.std(ddof) ?: Double.NaN
 
 @JvmName("intStd")
-public fun Iterable<Int>.std(ddof: Int = ddof_default): Double = varianceAndMean().std(ddof)
+internal fun Iterable<Int>.std(ddof: Int = ddof_default): Double = varianceAndMean().std(ddof)
 
 @JvmName("longStd")
-public fun Iterable<Long>.std(ddof: Int = ddof_default): Double = varianceAndMean().std(ddof)
+internal fun Iterable<Long>.std(ddof: Int = ddof_default): Double = varianceAndMean().std(ddof)
 
 @JvmName("bigDecimalStd")
-public fun Iterable<BigDecimal>.std(ddof: Int = ddof_default): Double = varianceAndMean().std(ddof)
+internal fun Iterable<BigDecimal>.std(ddof: Int = ddof_default): Double = varianceAndMean().std(ddof)
 
 @JvmName("bigIntegerStd")
-public fun Iterable<BigInteger>.std(ddof: Int = ddof_default): Double = varianceAndMean().std(ddof)
+internal fun Iterable<BigInteger>.std(ddof: Int = ddof_default): Double = varianceAndMean().std(ddof)

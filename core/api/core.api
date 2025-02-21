@@ -10796,39 +10796,9 @@ public final class org/jetbrains/kotlinx/dataframe/jupyter/RenderedContent$Compa
 	public final fun truncatedText (Ljava/lang/String;Ljava/lang/String;)Lorg/jetbrains/kotlinx/dataframe/jupyter/RenderedContent;
 }
 
-public final class org/jetbrains/kotlinx/dataframe/math/BasicStats {
-	public fun <init> (IDD)V
-	public final fun component1 ()I
-	public final fun component2 ()D
-	public final fun component3 ()D
-	public final fun copy (IDD)Lorg/jetbrains/kotlinx/dataframe/math/BasicStats;
-	public static synthetic fun copy$default (Lorg/jetbrains/kotlinx/dataframe/math/BasicStats;IDDILjava/lang/Object;)Lorg/jetbrains/kotlinx/dataframe/math/BasicStats;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getCount ()I
-	public final fun getMean ()D
-	public final fun getVariance ()D
-	public fun hashCode ()I
-	public final fun std (I)D
-	public fun toString ()Ljava/lang/String;
-}
-
 public final class org/jetbrains/kotlinx/dataframe/math/MeanKt {
-	public static final fun bigDecimalMean (Ljava/lang/Iterable;)D
-	public static final fun bigIntegerMean (Ljava/lang/Iterable;)D
-	public static final fun byteMean (Ljava/lang/Iterable;)D
-	public static final fun doubleMean (Ljava/lang/Iterable;Z)D
-	public static synthetic fun doubleMean$default (Ljava/lang/Iterable;ZILjava/lang/Object;)D
-	public static final fun floatMean (Ljava/lang/Iterable;Z)D
-	public static synthetic fun floatMean$default (Ljava/lang/Iterable;ZILjava/lang/Object;)D
-	public static final fun intMean (Ljava/lang/Iterable;)D
-	public static final fun longMean (Ljava/lang/Iterable;)D
 	public static final fun mean (Ljava/lang/Iterable;Lkotlin/reflect/KType;Z)D
-	public static final fun mean (Lkotlin/sequences/Sequence;Z)D
 	public static synthetic fun mean$default (Ljava/lang/Iterable;Lkotlin/reflect/KType;ZILjava/lang/Object;)D
-	public static synthetic fun mean$default (Lkotlin/sequences/Sequence;ZILjava/lang/Object;)D
-	public static final fun meanFloat (Lkotlin/sequences/Sequence;Z)D
-	public static synthetic fun meanFloat$default (Lkotlin/sequences/Sequence;ZILjava/lang/Object;)D
-	public static final fun shortMean (Ljava/lang/Iterable;)D
 }
 
 public final class org/jetbrains/kotlinx/dataframe/math/PercentileKt {
@@ -10836,31 +10806,8 @@ public final class org/jetbrains/kotlinx/dataframe/math/PercentileKt {
 }
 
 public final class org/jetbrains/kotlinx/dataframe/math/StdKt {
-	public static final fun bigDecimalStd (Ljava/lang/Iterable;I)D
-	public static synthetic fun bigDecimalStd$default (Ljava/lang/Iterable;IILjava/lang/Object;)D
-	public static final fun bigIntegerStd (Ljava/lang/Iterable;I)D
-	public static synthetic fun bigIntegerStd$default (Ljava/lang/Iterable;IILjava/lang/Object;)D
-	public static final fun doubleStd (Ljava/lang/Iterable;ZI)D
-	public static synthetic fun doubleStd$default (Ljava/lang/Iterable;ZIILjava/lang/Object;)D
-	public static final fun floatStd (Ljava/lang/Iterable;ZI)D
-	public static synthetic fun floatStd$default (Ljava/lang/Iterable;ZIILjava/lang/Object;)D
-	public static final fun intStd (Ljava/lang/Iterable;I)D
-	public static synthetic fun intStd$default (Ljava/lang/Iterable;IILjava/lang/Object;)D
-	public static final fun longStd (Ljava/lang/Iterable;I)D
-	public static synthetic fun longStd$default (Ljava/lang/Iterable;IILjava/lang/Object;)D
 	public static final fun std (Ljava/lang/Iterable;Lkotlin/reflect/KType;ZI)D
 	public static synthetic fun std$default (Ljava/lang/Iterable;Lkotlin/reflect/KType;ZIILjava/lang/Object;)D
-}
-
-public final class org/jetbrains/kotlinx/dataframe/math/StdMeanKt {
-	public static final fun bigDecimalVarianceAndMean (Ljava/lang/Iterable;)Lorg/jetbrains/kotlinx/dataframe/math/BasicStats;
-	public static final fun bigIntegerVarianceAndMean (Ljava/lang/Iterable;)Lorg/jetbrains/kotlinx/dataframe/math/BasicStats;
-	public static final fun doubleVarianceAndMean (Ljava/lang/Iterable;Z)Lorg/jetbrains/kotlinx/dataframe/math/BasicStats;
-	public static synthetic fun doubleVarianceAndMean$default (Ljava/lang/Iterable;ZILjava/lang/Object;)Lorg/jetbrains/kotlinx/dataframe/math/BasicStats;
-	public static final fun floatVarianceAndMean (Ljava/lang/Iterable;Z)Lorg/jetbrains/kotlinx/dataframe/math/BasicStats;
-	public static synthetic fun floatVarianceAndMean$default (Ljava/lang/Iterable;ZILjava/lang/Object;)Lorg/jetbrains/kotlinx/dataframe/math/BasicStats;
-	public static final fun intVarianceAndMean (Ljava/lang/Iterable;)Lorg/jetbrains/kotlinx/dataframe/math/BasicStats;
-	public static final fun longVarianceAndMean (Ljava/lang/Iterable;)Lorg/jetbrains/kotlinx/dataframe/math/BasicStats;
 }
 
 public final class org/jetbrains/kotlinx/dataframe/math/SumKt {

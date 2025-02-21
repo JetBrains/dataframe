@@ -6,28 +6,11 @@ import java.math.BigInteger
 import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
-public inline fun <reified T : Comparable<T>> Iterable<T>.percentileOrNull(percentile: Double): T? =
-    percentile(percentile, typeOf<T>())
-
-public inline fun <reified T : Comparable<T>> Iterable<T>.percentile(percentile: Double): T =
-    percentileOrNull(percentile)!!
-
-public inline fun <reified T : Comparable<T>> Iterable<T>.q1OrNull(): T? = q1(typeOf<T>())
-
-public inline fun <reified T : Comparable<T>> Iterable<T>.q1(): T = q1OrNull()!!
-
-public inline fun <reified T : Comparable<T>> Iterable<T>.q3OrNull(): T? = q3(typeOf<T>())
-
-public inline fun <reified T : Comparable<T>> Iterable<T>.q3(): T = q3OrNull()!!
-
 @PublishedApi
-internal inline fun <reified T : Comparable<T>> Iterable<T?>.q1(type: KType): T? = percentile(25.0, type)
-
-@PublishedApi
-internal inline fun <reified T : Comparable<T>> Iterable<T?>.q3(type: KType): T? = percentile(75.0, type)
-
-@PublishedApi
-internal inline fun <reified T : Comparable<T>> Iterable<T?>.percentile(percentile: Double, type: KType): T? {
+internal inline fun <reified T : Comparable<T>> Iterable<T?>.percentile(
+    percentile: Double,
+    type: KType = typeOf<T>(),
+): T? {
     require(percentile in 0.0..100.0) { "Percentile must be in range [0, 100]" }
 
     @Suppress("UNCHECKED_CAST")

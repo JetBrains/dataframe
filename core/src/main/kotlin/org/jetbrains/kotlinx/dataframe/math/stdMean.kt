@@ -7,16 +7,16 @@ import java.math.BigDecimal
 import java.math.BigInteger
 import kotlin.math.sqrt
 
-public data class BasicStats(val count: Int, val mean: Double, val variance: Double) {
+internal data class BasicStats(val count: Int, val mean: Double, val variance: Double) {
 
-    public fun std(ddof: Int): Double {
+    fun std(ddof: Int): Double {
         if (count <= ddof) return Double.NaN
         return sqrt(variance / (count - ddof))
     }
 }
 
 @JvmName("doubleVarianceAndMean")
-public fun Iterable<Double>.varianceAndMean(skipNA: Boolean = skipNA_default): BasicStats? {
+internal fun Iterable<Double>.varianceAndMean(skipNA: Boolean = skipNA_default): BasicStats? {
     var count = 0
     var sum = .0
     for (element in this) {
@@ -41,7 +41,7 @@ public fun Iterable<Double>.varianceAndMean(skipNA: Boolean = skipNA_default): B
 }
 
 @JvmName("floatVarianceAndMean")
-public fun Iterable<Float>.varianceAndMean(skipNA: Boolean = skipNA_default): BasicStats? {
+internal fun Iterable<Float>.varianceAndMean(skipNA: Boolean = skipNA_default): BasicStats? {
     var count = 0
     var sum = .0
     for (element in this) {
@@ -66,7 +66,7 @@ public fun Iterable<Float>.varianceAndMean(skipNA: Boolean = skipNA_default): Ba
 }
 
 @JvmName("intVarianceAndMean")
-public fun Iterable<Int>.varianceAndMean(): BasicStats {
+internal fun Iterable<Int>.varianceAndMean(): BasicStats {
     var count = 0
     var sum = .0
     for (element in this) {
@@ -83,7 +83,7 @@ public fun Iterable<Int>.varianceAndMean(): BasicStats {
 }
 
 @JvmName("longVarianceAndMean")
-public fun Iterable<Long>.varianceAndMean(): BasicStats {
+internal fun Iterable<Long>.varianceAndMean(): BasicStats {
     var count = 0
     var sum = .0
     for (element in this) {
@@ -100,7 +100,7 @@ public fun Iterable<Long>.varianceAndMean(): BasicStats {
 }
 
 @JvmName("bigDecimalVarianceAndMean")
-public fun Iterable<BigDecimal>.varianceAndMean(): BasicStats {
+internal fun Iterable<BigDecimal>.varianceAndMean(): BasicStats {
     var count = 0
     var sum = BigDecimal.ZERO
     for (element in this) {
@@ -117,7 +117,7 @@ public fun Iterable<BigDecimal>.varianceAndMean(): BasicStats {
 }
 
 @JvmName("bigIntegerVarianceAndMean")
-public fun Iterable<BigInteger>.varianceAndMean(): BasicStats {
+internal fun Iterable<BigInteger>.varianceAndMean(): BasicStats {
     var count = 0
     var sum = BigInteger.ZERO
     for (element in this) {
