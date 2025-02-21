@@ -52,6 +52,14 @@ public abstract class DbType(public val dbTypeInJdbcUrl: String) {
     public abstract fun convertSqlTypeToKType(tableColumnMetadata: TableColumnMetadata): KType?
 
     /**
+     * Converts a Kotlin type ([KType]) to its corresponding SQL type as a String.
+     *
+     * @param kType The Kotlin type to be converted.
+     * @return The corresponding SQL type as a String, or null if no matching SQL type exists.
+     */
+    public abstract fun convertKTypeToSqlType(kType: KType): String?
+
+    /**
      * Constructs a SQL query with a limit clause.
      *
      * @param sqlQuery The original SQL query.
@@ -59,4 +67,11 @@ public abstract class DbType(public val dbTypeInJdbcUrl: String) {
      * @return A new SQL query with the limit clause added.
      */
     public open fun sqlQueryLimit(sqlQuery: String, limit: Int = 1): String = "$sqlQuery LIMIT $limit"
+
+    /**
+     * Handles optional type conversion for nullable values.
+     */
+    public open fun handleNullable(sqlType: String, isNullable: Boolean): String {
+        return if (isNullable) "$sqlType NULL" else "$sqlType NOT NULL"
+    }
 }
