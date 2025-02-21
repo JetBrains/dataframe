@@ -65,7 +65,7 @@ public fun <T, R> DataColumn<T>.mapIndexed(
 
 // region DataFrame
 
-public fun <T, R> DataFrame<T>.map(transform: RowExpression<T, R>): List<R> = rows().map { transform(it, it) }
+public fun <T, R> DataFrame<T>.map(transform: RowExpression<T, R>, rows: Iterable<DataRow<T>> = rows()): List<R> = rows.map { transform(it, it) }
 
 public inline fun <T, reified R> ColumnsContainer<T>.mapToColumn(
     name: String,
