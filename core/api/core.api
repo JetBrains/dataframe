@@ -9938,8 +9938,6 @@ public final class org/jetbrains/kotlinx/dataframe/impl/UtilsKt {
 	public static final fun getColumnName (Lkotlin/reflect/KCallable;)Ljava/lang/String;
 	public static final fun getColumnName (Lkotlin/reflect/KFunction;)Ljava/lang/String;
 	public static final fun getColumnName (Lkotlin/reflect/KProperty;)Ljava/lang/String;
-	public static final fun getDELIMITED_STRING_REGEX ()Lkotlin/text/Regex;
-	public static final fun getDELIMITERS_REGEX ()Lkotlin/text/Regex;
 	public static final fun headPlusArray (B[B)[B
 	public static final fun headPlusArray (C[C)[C
 	public static final fun headPlusArray (D[D)[D
@@ -9949,6 +9947,7 @@ public final class org/jetbrains/kotlinx/dataframe/impl/UtilsKt {
 	public static final fun headPlusArray (S[S)[S
 	public static final fun headPlusArray (Z[Z)[Z
 	public static final fun toCamelCaseByDelimiters (Ljava/lang/String;Lkotlin/text/Regex;)Ljava/lang/String;
+	public static synthetic fun toCamelCaseByDelimiters$default (Ljava/lang/String;Lkotlin/text/Regex;ILjava/lang/Object;)Ljava/lang/String;
 	public static final fun zero (Lkotlin/reflect/KClass;)Ljava/lang/Number;
 	public static final fun zeroOrNull (Lkotlin/reflect/KClass;)Ljava/lang/Number;
 }

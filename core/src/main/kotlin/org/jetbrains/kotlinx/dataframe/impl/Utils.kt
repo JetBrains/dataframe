@@ -337,27 +337,109 @@ internal fun <T : Comparable<T>> T.between(left: T, right: T, includeBoundaries:
         this > left && this < right
     }
 
-private const val DELIMITERS = "[_\\s]"
-public val DELIMITERS_REGEX: Regex = DELIMITERS.toRegex()
-public val DELIMITED_STRING_REGEX: Regex = ".+$DELIMITERS.+".toRegex()
+// Single regex to split words by non-alphanumeric characters, camelCase, and numbers
 
-internal val CAMEL_REGEX = "(?<=[a-zA-Z])[A-Z]".toRegex()
+internal val CAMEL_DEFAULT_DELIMITERS_REGEX =
+    "[^a-zA-Z0-9]+|(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=\\d)(?=[a-zA-Z])|(?<=[a-zA-Z])(?=\\d)".toRegex()
 
-public fun String.toCamelCaseByDelimiters(delimiters: Regex): String = split(delimiters).joinToCamelCaseString()
+/**
+ * Converts a string into lowerCamelCase using [delimiters].
+ *
+ * - Splits words using a unified regex that handles delimiters.
+ * - If the string does not contain any letters or numbers, it remains unchanged.
+ * - Places underscore ("_") between numbers.
+ * - The first word remains in lowercase, and subsequent words are capitalized.
+ *
+ * Default behavior (with [CAMEL_DEFAULT_DELIMITERS_REGEX]):
+ *
+ * ```
+ * "hello_world" -> "helloWorld"
+ * "HelloWorld" -> "helloWorld"
+ * "json.parser.Config" -> "jsonParserConfig"
+ * "my.var_name test" -> "myVarNameTest"
+ * "thirdColumn" -> "thirdColumn"
+ * "someHTMLParser" -> "someHtmlParser"
+ * "RESTApi" -> "restApi"
+ * "OAuth2Token" -> "oAuth2Token"
+ * "GraphQLQuery" -> "graphQlQuery"
+ * "TCP_3_PROTOCOL" -> "tcp3Protocol"
+ * "123hello_world456" -> "123HelloWorld456"
+ * "API_Response_2023" -> "apiResponse2023"
+ * "UPPER_case-LOWER" -> "upperCaseLower"
+ * "12parse34CamelCase" -> "12Parse34CamelCase"
+ * "snake_case_example" -> "snakeCaseExample"
+ * "dot.separated.words" -> "dotSeparatedWords"
+ * "kebab-case-example" -> "kebabCaseExample"
+ * "MIXED_Case_with_123Numbers" -> "mixedCaseWith123Numbers"
+ * "___!!!___" -> "___!!!___"
+ * "1000.2000.3000" -> "1000_2000_3000"
+ * "UPPERCASE" -> "uppercase"
+ * "alreadyCamelCased" -> "alreadyCamelCased"
+ * "justNumbers123" -> "justNumbers123"
+ * "Just_Special\$Chars!!" -> "justSpecialChars"
+ * "singleword" -> "singleword"
+ * "word_with_underscores_and-dashes" -> "wordWithUnderscoresAndDashes"
+ * "10-20-aa" -> "10_20Aa"
+ * ```
+ *
+ * @return trhe formatted string in lowerCamelCase.
+ */
+public fun String.toCamelCaseByDelimiters(delimiters: Regex = CAMEL_DEFAULT_DELIMITERS_REGEX): String =
+    if (!this.any { it.isLetter() || it.isDigit() }) {
+        this // If the string has no letters, return it unchanged
+    } else {
+        split(delimiters)
+            .filter { it.isNotBlank() }
+            .map { it.lowercase() }
+            .joinNumbers("_")
+            .joinToCamelCaseString()
+    }
+
+/**
+ * Joins consecutive numbers in a list with the given [separator].
+ */
+private fun List<String>.joinNumbers(separator: CharSequence): List<String> {
+    val result = mutableListOf<String>()
+    var i = 0
+
+    while (i < this.size) {
+        val current = this[i]
+        if (current.all { it.isDigit() }) { // Check if the current element is a number
+            val numberGroup = mutableListOf(current)
+            while (i + 1 < this.size && this[i + 1].all { it.isDigit() }) {
+                numberGroup.add(this[i + 1])
+                i++
+            }
+            result.add(numberGroup.joinToString(separator)) // Join consecutive numbers with "_"
+        } else {
+            result.add(current)
+        }
+        i++
+    }
+    return result
+}
+
+/**
+ * Joins a list of words into lowerCamelCase format.
+ * - The first word is converted to lowercase.
+ * - Subsequent words start with an uppercase letter.
+ */
+private fun List<String>.joinToCamelCaseString(): String =
+    mapIndexed { index, word ->
+        if (index == 0) word.lowercase() else word.replaceFirstChar { it.uppercaseChar() }
+    }.joinToString("")
+
+internal val CAMEL_LETTERS_REGEX = "(?<=[a-zA-Z])[A-Z]".toRegex()
 
 internal fun String.toSnakeCase(): String =
     if ("[A-Z_]+".toRegex().matches(this)) {
         this
     } else {
-        CAMEL_REGEX
+        CAMEL_LETTERS_REGEX
             .replace(this) { "_${it.value}" }
             .replace(" ", "_")
             .lowercase()
     }
-
-internal fun List<String>.joinToCamelCaseString(): String =
-    joinToString(separator = "") { it.replaceFirstChar { it.uppercaseChar() } }
-        .replaceFirstChar { it.lowercaseChar() }
 
 /** @include [KCallable.isGetterLike] */
 internal fun KFunction<*>.isGetterLike(): Boolean =

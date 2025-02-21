@@ -3,7 +3,6 @@ package org.jetbrains.kotlinx.dataframe.io
 import org.jetbrains.kotlinx.dataframe.codeGen.FieldType
 import org.jetbrains.kotlinx.dataframe.codeGen.GeneratedField
 import org.jetbrains.kotlinx.dataframe.codeGen.ValidFieldName
-import org.jetbrains.kotlinx.dataframe.impl.DELIMITERS_REGEX
 import org.jetbrains.kotlinx.dataframe.impl.toCamelCaseByDelimiters
 import org.jetbrains.kotlinx.dataframe.schema.ColumnSchema
 import kotlin.reflect.typeOf
@@ -18,7 +17,7 @@ internal fun String.withoutTopInterfaceName(topInterfaceName: ValidFieldName): S
         this
     }
 
-internal fun String.snakeToLowerCamelCase(): String = toCamelCaseByDelimiters(DELIMITERS_REGEX)
+internal fun String.snakeToLowerCamelCase(): String = toCamelCaseByDelimiters()
 
 internal fun String.snakeToUpperCamelCase(): String =
     snakeToLowerCamelCase()

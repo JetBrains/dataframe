@@ -152,7 +152,7 @@ fun main() {
 
         val df = con
             .readDataFrame("SELECT * FROM orders", dbType = HSQLDB)
-            .rename { all() }.into { it.name.lowercase(Locale.getDefault()).toCamelCaseByDelimiters(DELIMITERS_REGEX) }
+            .renameToCamelCase()
             .cast<Orders>(verify = true)
 
         df.filter { it.price > 800 }.print()

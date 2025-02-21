@@ -13,8 +13,6 @@ import org.jetbrains.kotlinx.dataframe.columns.ColumnWithPath
 import org.jetbrains.kotlinx.dataframe.columns.FrameColumn
 import org.jetbrains.kotlinx.dataframe.columns.renamedReference
 import org.jetbrains.kotlinx.dataframe.columns.toColumnSet
-import org.jetbrains.kotlinx.dataframe.impl.DELIMITED_STRING_REGEX
-import org.jetbrains.kotlinx.dataframe.impl.DELIMITERS_REGEX
 import org.jetbrains.kotlinx.dataframe.impl.api.renameImpl
 import org.jetbrains.kotlinx.dataframe.impl.columnName
 import org.jetbrains.kotlinx.dataframe.impl.toCamelCaseByDelimiters
@@ -48,21 +46,39 @@ public class RenameClause<T, C>(internal val df: DataFrame<T>, internal val colu
 /**
  * ## Rename to camelCase
  *
- * This function renames all columns to `camelCase` by replacing all [delimiters][DELIMITERS_REGEX]
- * and converting the first char to lowercase.
- * Even [DataFrames][DataFrame] inside [FrameColumns][FrameColumn] are traversed recursively.
+ * This function renames all columns in this [DataFrame] to `camelCase` format.
+ * All delimiters are removed, words are capitalized except for the first one.
+ *
+ * This function supports converting names from `snake_case`, `PascalCase`, and other delimited formats
+ * into a consistent `camelCase` representation.
+ *
+ * [DataFrames][DataFrame] inside [FrameColumns][FrameColumn] are traversed recursively.
+ *
+ * Returns a [DataFrame] with updated column names.
+ *
+ * ### Examples:
+ * ```
+ * "snake_case_name" -> "snakeCaseName"
+ * "PascalCaseName" -> "pascalCaseName"
+ * "doner-case-name" -> "donerCaseName"
+ * "UPPER_CASE_NAME -> upperCaseName"
+ * ```
+ *
+ * @return a [DataFrame] with column names converted to camel case format.
  */
 @Refine
 @Interpretable("RenameToCamelCase")
 public fun <T> DataFrame<T>.renameToCamelCase(): DataFrame<T> =
     // recursively rename all columns written with delimiters or starting with a capital to camel case
     rename {
-        colsAtAnyDepth { it.name() matches DELIMITED_STRING_REGEX || it.name[0].isUpperCase() }
+        colsAtAnyDepth()
     }.toCamelCase()
         // take all frame columns at any depth and call renameToCamelCase() on all dataframes inside
         .update {
             colsAtAnyDepth().colsOf<AnyFrame>()
-        }.with { it.renameToCamelCase() }
+        }.with {
+            it.renameToCamelCase()
+        }
 
 @AccessApiOverload
 public fun <T, C> RenameClause<T, C>.into(vararg newColumns: ColumnReference<*>): DataFrame<T> =
@@ -82,8 +98,23 @@ public fun <T, C> RenameClause<T, C>.into(transform: (ColumnWithPath<C>) -> Stri
 /**
  * ## Rename to camelCase
  *
- * Renames the selected columns to `camelCase` by replacing all [delimiters][DELIMITERS_REGEX]
- * and converting the first char to lowercase.
+ * Renames the columns, previously selected with [rename] to `camelCase` format.
+ * All delimiters are removed, words are capitalized except for the first one.
+ *
+ * Returns a [DataFrame] with updated column names.
+ *
+ * This function supports converting names from `snake_case`, `PascalCase`, and other delimited formats
+ * into a consistent `camelCase` representation.
+ *
+ * ### Examples:
+ * ```
+ * "snake_case_name" -> "snakeCaseName"
+ * "PascalCaseName" -> "pascalCaseName"
+ * "doner-case-name" -> "donerCaseName"
+ * "UPPER_CASE_NAME -> upperCaseName"
+ * ```
+ *
+ * @return a [DataFrame] with column names converted to camel case format.
  */
 @Refine
 @Interpretable("RenameToCamelCaseClause")
@@ -96,15 +127,28 @@ public fun <T, C> RenameClause<T, C>.toCamelCase(): DataFrame<T> = into { it.ren
 /**
  * ## Rename to camelCase
  *
- * Renames this column to `camelCase` by replacing all [delimiters][DELIMITERS_REGEX]
- * and converting the first char to lowercase.
+ * Renames this column to `camelCase` format.
+ * All delimiters are removed, words are capitalized except for the first one.
+ *
+ * Returns a [ColumnReference] with updated name.
+ *
+ * This function supports converting names from `snake_case`, `PascalCase`, and other delimited formats
+ * into a consistent `camelCase` representation.
+ *
+ * ### Examples:
+ * ```
+ * "snake_case_name" -> "snakeCaseName"
+ * "PascalCaseName" -> "pascalCaseName"
+ * "doner-case-name" -> "donerCaseName"
+ * "UPPER_CASE_NAME -> upperCaseName"
+ * ```
+ *
+ * @return a [ColumnReference] with the name converted to camel case format.
  */
 @Suppress("UNCHECKED_CAST")
 public fun <T, C : ColumnReference<T>> C.renameToCamelCase(): C =
     rename(
-        this.name()
-            .toCamelCaseByDelimiters(DELIMITERS_REGEX)
-            .replaceFirstChar { it.lowercaseChar() },
+        this.name().toCamelCaseByDelimiters(),
     ) as C
 
 @Suppress("UNCHECKED_CAST")

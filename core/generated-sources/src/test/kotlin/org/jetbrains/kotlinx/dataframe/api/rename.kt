@@ -180,6 +180,13 @@ class RenameToCamelCaseTests {
     }
 
     @Test
+    fun `uppercase names`() {
+        val originalDf = dataFrameOf("ID", "ITEM", "ORDER_DATE")(1, "TOY", "02.03.2009")
+        val renamedDf = originalDf.renameToCamelCase()
+        renamedDf.columnNames() shouldBe listOf("id", "item", "orderDate")
+    }
+
+    @Test
     fun `doubly nested row`() {
         val doublyNestedColumnGroup = dataFrameOf("test_name")(
             dataFrameOf("another_name")(
