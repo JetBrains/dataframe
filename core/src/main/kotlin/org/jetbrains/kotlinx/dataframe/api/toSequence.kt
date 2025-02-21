@@ -7,8 +7,8 @@ import kotlin.reflect.typeOf
 
 // region DataFrame
 
-public inline fun <reified T> DataFrame<T>.toList(): List<T> = toSequenceImpl(typeOf<T>()).toList() as List<T>
+public inline fun <reified T> DataFrame<T>.toSequence(): Sequence<T> = toSequenceImpl(typeOf<T>()) as Sequence<T>
 
-public inline fun <reified T> AnyFrame.toListOf(): List<T> = toSequenceImpl(typeOf<T>()).toList() as List<T>
+public inline fun <reified T> AnyFrame.toSequenceOf(): Sequence<T> = toSequenceImpl(typeOf<T>()) as Sequence<T>
 
 // endregion

@@ -21,7 +21,7 @@ import kotlin.reflect.full.withNullability
 import kotlin.reflect.jvm.jvmErasure
 
 @PublishedApi
-internal fun AnyFrame.toListImpl(type: KType): List<Any> {
+internal fun AnyFrame.toSequenceImpl(type: KType): Sequence<Any> {
     val clazz = type.jvmErasure
     require(clazz.isData) { "`$clazz` is not a data class. `toList` is supported only for data classes." }
 
@@ -46,7 +46,7 @@ internal fun AnyFrame.toListImpl(type: KType): List<Any> {
                     val col: AnyCol = if (it.type.jvmErasure == List::class) {
                         val elementType = it.type.arguments[0].type
                         require(elementType != null) { "FrameColumn can not be converted to type `List<*>`" }
-                        column.asAnyFrameColumn().map { it.toListImpl(elementType) }
+                        column.asAnyFrameColumn().map { it.toSequenceImpl(elementType).toList() }
                     } else {
                         error("FrameColumn can not be converted to type `${it.type}`")
                     }
@@ -54,7 +54,7 @@ internal fun AnyFrame.toListImpl(type: KType): List<Any> {
                 }
 
                 ColumnKind.Group -> {
-                    DataColumn.createValueColumn(column.name(), column.asColumnGroup().toListImpl(it.type))
+                    DataColumn.createValueColumn(column.name(), column.asColumnGroup().toSequenceImpl(it.type).toList())
                 }
 
                 ColumnKind.Value -> {
@@ -74,7 +74,7 @@ internal fun AnyFrame.toListImpl(type: KType): List<Any> {
         convertedColumn
     }
 
-    return rows().map { row ->
+    return rows().asSequence().map { row ->
         val parameters = convertedColumns
             .map { row[it] }
             .toTypedArray()

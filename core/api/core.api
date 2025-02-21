@@ -10072,8 +10072,8 @@ public final class org/jetbrains/kotlinx/dataframe/impl/api/ToDataFrameKt {
 	public static final fun createDataFrameImpl (Ljava/lang/Iterable;Lkotlin/reflect/KClass;Lkotlin/jvm/functions/Function1;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
 }
 
-public final class org/jetbrains/kotlinx/dataframe/impl/api/ToListKt {
-	public static final fun toListImpl (Lorg/jetbrains/kotlinx/dataframe/DataFrame;Lkotlin/reflect/KType;)Ljava/util/List;
+public final class org/jetbrains/kotlinx/dataframe/impl/api/ToSequenceKt {
+	public static final fun toSequenceImpl (Lorg/jetbrains/kotlinx/dataframe/DataFrame;Lkotlin/reflect/KType;)Ljava/lang/Iterable;
 }
 
 public final class org/jetbrains/kotlinx/dataframe/impl/api/UpdateKt {
