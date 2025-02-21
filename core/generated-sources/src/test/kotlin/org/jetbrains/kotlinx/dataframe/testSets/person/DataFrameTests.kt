@@ -107,8 +107,8 @@ import org.jetbrains.kotlinx.dataframe.api.minOf
 import org.jetbrains.kotlinx.dataframe.api.minus
 import org.jetbrains.kotlinx.dataframe.api.move
 import org.jetbrains.kotlinx.dataframe.api.moveTo
-import org.jetbrains.kotlinx.dataframe.api.moveToLeft
-import org.jetbrains.kotlinx.dataframe.api.moveToRight
+import org.jetbrains.kotlinx.dataframe.api.moveToEnd
+import org.jetbrains.kotlinx.dataframe.api.moveToStart
 import org.jetbrains.kotlinx.dataframe.api.name
 import org.jetbrains.kotlinx.dataframe.api.named
 import org.jetbrains.kotlinx.dataframe.api.notNull
@@ -142,11 +142,11 @@ import org.jetbrains.kotlinx.dataframe.api.toColumnAccessor
 import org.jetbrains.kotlinx.dataframe.api.toColumnOf
 import org.jetbrains.kotlinx.dataframe.api.toDataFrame
 import org.jetbrains.kotlinx.dataframe.api.toDouble
+import org.jetbrains.kotlinx.dataframe.api.toEnd
 import org.jetbrains.kotlinx.dataframe.api.toInt
 import org.jetbrains.kotlinx.dataframe.api.toList
 import org.jetbrains.kotlinx.dataframe.api.toListOf
 import org.jetbrains.kotlinx.dataframe.api.toMap
-import org.jetbrains.kotlinx.dataframe.api.toRight
 import org.jetbrains.kotlinx.dataframe.api.toStr
 import org.jetbrains.kotlinx.dataframe.api.toValueColumn
 import org.jetbrains.kotlinx.dataframe.api.transpose
@@ -689,14 +689,14 @@ class DataFrameTests : BaseTest() {
 
     @Test
     fun `move several columns to left`() {
-        val moved = typed.moveToLeft { weight and age }
+        val moved = typed.moveToStart { weight and age }
         val expected = typed.select { cols(weight, age, name, city) }
         moved shouldBe expected
     }
 
     @Test
     fun `move several columns to right`() {
-        val moved = typed.moveToRight { weight and name }
+        val moved = typed.moveToEnd { weight and name }
         val expected = typed.select { cols(age, city, weight, name) }
         moved shouldBe expected
     }
@@ -1130,7 +1130,7 @@ class DataFrameTests : BaseTest() {
         val cities = filtered.city.toList().map { it!!.lowercase() }
         val gathered =
             res.gather { colsOf<Boolean> { cities.contains(it.name()) } }.where { it }.keysInto("city")
-        val expected = filtered.select { name and age and city.map { it!!.lowercase() } }.moveToRight { city }
+        val expected = filtered.select { name and age and city.map { it!!.lowercase() } }.moveToEnd { city }
         gathered shouldBe expected
     }
 
@@ -2273,7 +2273,7 @@ class DataFrameTests : BaseTest() {
 
         df.remove { city }.convertTo<Target>() shouldBe
             df.update { city }.withNull()
-                .move { city }.toRight()
+                .move { city }.toEnd()
 
         shouldThrow<IllegalArgumentException> {
             df.remove { age }.convertTo<Target>()
@@ -2283,7 +2283,7 @@ class DataFrameTests : BaseTest() {
             fill { age }.with { -1 }
         } shouldBe
             df.update { age }.with { -1 }
-                .move { age }.toRight()
+                .move { age }.toEnd()
 
         shouldThrow<TypeConversionException> {
             df.update { name }.at(2).withNull()

@@ -125,3 +125,15 @@ internal const val ALL_COLS_EXCEPT_REPLACE_VARARG = "this.allColsExcept { others
 internal const val EXCEPT_REPLACE = "this.except { other }"
 internal const val EXCEPT_REPLACE_VARARG = "this.except { others.toColumnSet() }"
 // endregion
+
+internal const val MOVE_TO_LEFT = "This `moveToLeft` overload will be removed in favor of `moveToStart`. $MESSAGE_0_16"
+internal const val MOVE_TO_LEFT_REPLACE = "this.moveToStart(columns)"
+
+internal const val MOVE_TO_RIGHT = "This `moveToRight` overload will be removed in favor of `moveToEnd`. $MESSAGE_0_16"
+internal const val MOVE_TO_RIGHT_REPLACE = "this.moveToEnd(columns)"
+
+internal const val TO_LEFT = "This `toLeft` overload will be removed in favor of `toStart`. $MESSAGE_0_16"
+internal const val TO_LEFT_REPLACE = "this.toStart()"
+
+internal const val TO_RIGHT = "This `toRight` overload will be removed in favor of `toEnd`. $MESSAGE_0_16"
+internal const val TO_RIGHT_REPLACE = "this.toEnd()"

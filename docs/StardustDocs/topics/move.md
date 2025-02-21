@@ -6,7 +6,7 @@ Moves one or several columns within [`DataFrame`](DataFrame.md).
 
 ```kotlin
 move { columns }
-    .into { pathSelector } | .under { parentColumn } | .after { column } | .to(position) | .toTop() | .toLeft() | .toRight()
+    .into { pathSelector } | .under { parentColumn } | .after { column } | .to(position) | .toTop() | .toStart() | .toEnd()
 
 pathSelector: DataFrame.(DataColumn) -> ColumnPath
 ```
@@ -18,7 +18,7 @@ Can be used to change columns hierarchy by providing `ColumnPath` for every move
 <!---FUN move-->
 
 ```kotlin
-df.move { age }.toLeft()
+df.move { age }.toStart()
 
 df.move { weight }.to(1)
 

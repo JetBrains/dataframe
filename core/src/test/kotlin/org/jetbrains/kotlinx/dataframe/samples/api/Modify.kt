@@ -88,7 +88,7 @@ import org.jetbrains.kotlinx.dataframe.api.split
 import org.jetbrains.kotlinx.dataframe.api.sum
 import org.jetbrains.kotlinx.dataframe.api.to
 import org.jetbrains.kotlinx.dataframe.api.toFloat
-import org.jetbrains.kotlinx.dataframe.api.toLeft
+import org.jetbrains.kotlinx.dataframe.api.toStart
 import org.jetbrains.kotlinx.dataframe.api.toMap
 import org.jetbrains.kotlinx.dataframe.api.toPath
 import org.jetbrains.kotlinx.dataframe.api.toTop
@@ -114,7 +114,6 @@ import org.junit.Test
 import java.net.URL
 import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.streams.toList
 
 @Suppress("ktlint:standard:chain-method-continuation", "ktlint:standard:argument-list-wrapping")
 class Modify : TestBase() {
@@ -340,7 +339,7 @@ class Modify : TestBase() {
     @TransformDataFrameExpressions
     fun move() {
         // SampleStart
-        df.move { age }.toLeft()
+        df.move { age }.toStart()
 
         df.move { weight }.to(1)
 

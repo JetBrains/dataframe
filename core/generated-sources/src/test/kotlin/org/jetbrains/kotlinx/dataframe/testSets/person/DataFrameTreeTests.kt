@@ -72,8 +72,8 @@ import org.jetbrains.kotlinx.dataframe.api.maxBy
 import org.jetbrains.kotlinx.dataframe.api.median
 import org.jetbrains.kotlinx.dataframe.api.move
 import org.jetbrains.kotlinx.dataframe.api.moveTo
-import org.jetbrains.kotlinx.dataframe.api.moveToLeft
-import org.jetbrains.kotlinx.dataframe.api.moveToRight
+import org.jetbrains.kotlinx.dataframe.api.moveToEnd
+import org.jetbrains.kotlinx.dataframe.api.moveToStart
 import org.jetbrains.kotlinx.dataframe.api.pathOf
 import org.jetbrains.kotlinx.dataframe.api.perRowCol
 import org.jetbrains.kotlinx.dataframe.api.pivot
@@ -554,7 +554,7 @@ class DataFrameTreeTests : BaseTest() {
             .remove { it[groupCol]["city"] }
             .ungroup(groupCol)
             .sortBy { name and age }
-        res shouldBe typed.sortBy { name and age }.moveToLeft { city }
+        res shouldBe typed.sortBy { name and age }.moveToStart { city }
     }
 
     @Test
@@ -567,7 +567,7 @@ class DataFrameTreeTests : BaseTest() {
             .remove { it[groupCol]["city"] }
             .ungroup(groupCol)
             .sortBy { name and age }
-        res shouldBe typed.sortBy { name and age }.moveToLeft { city }
+        res shouldBe typed.sortBy { name and age }.moveToStart { city }
     }
 
     @Test
@@ -592,7 +592,7 @@ class DataFrameTreeTests : BaseTest() {
     @Test
     fun `join with right path`() {
         val joined = typed.remove { city }.join(typed2.remove { weight }) { name.match(right.nameAndCity.name) and age }
-        val expected = typed.moveToRight { city }.move { city }.under("nameAndCity")
+        val expected = typed.moveToEnd { city }.move { city }.under("nameAndCity")
         joined shouldBe expected
     }
 

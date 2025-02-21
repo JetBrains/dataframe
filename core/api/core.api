@@ -6277,6 +6277,10 @@ public final class org/jetbrains/kotlinx/dataframe/api/MoveKt {
 	public static final fun moveTo (Lorg/jetbrains/kotlinx/dataframe/DataFrame;I[Ljava/lang/String;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
 	public static final fun moveTo (Lorg/jetbrains/kotlinx/dataframe/DataFrame;I[Lkotlin/reflect/KProperty;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
 	public static final fun moveTo (Lorg/jetbrains/kotlinx/dataframe/DataFrame;I[Lorg/jetbrains/kotlinx/dataframe/columns/ColumnReference;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
+	public static final fun moveToEnd (Lorg/jetbrains/kotlinx/dataframe/DataFrame;Lkotlin/jvm/functions/Function2;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
+	public static final fun moveToEnd (Lorg/jetbrains/kotlinx/dataframe/DataFrame;[Ljava/lang/String;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
+	public static final fun moveToEnd (Lorg/jetbrains/kotlinx/dataframe/DataFrame;[Lkotlin/reflect/KProperty;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
+	public static final fun moveToEnd (Lorg/jetbrains/kotlinx/dataframe/DataFrame;[Lorg/jetbrains/kotlinx/dataframe/columns/ColumnReference;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
 	public static final fun moveToLeft (Lorg/jetbrains/kotlinx/dataframe/DataFrame;Lkotlin/jvm/functions/Function2;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
 	public static final fun moveToLeft (Lorg/jetbrains/kotlinx/dataframe/DataFrame;[Ljava/lang/String;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
 	public static final fun moveToLeft (Lorg/jetbrains/kotlinx/dataframe/DataFrame;[Lkotlin/reflect/KProperty;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
@@ -6285,9 +6289,15 @@ public final class org/jetbrains/kotlinx/dataframe/api/MoveKt {
 	public static final fun moveToRight (Lorg/jetbrains/kotlinx/dataframe/DataFrame;[Ljava/lang/String;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
 	public static final fun moveToRight (Lorg/jetbrains/kotlinx/dataframe/DataFrame;[Lkotlin/reflect/KProperty;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
 	public static final fun moveToRight (Lorg/jetbrains/kotlinx/dataframe/DataFrame;[Lorg/jetbrains/kotlinx/dataframe/columns/ColumnReference;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
+	public static final fun moveToStart (Lorg/jetbrains/kotlinx/dataframe/DataFrame;Lkotlin/jvm/functions/Function2;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
+	public static final fun moveToStart (Lorg/jetbrains/kotlinx/dataframe/DataFrame;[Ljava/lang/String;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
+	public static final fun moveToStart (Lorg/jetbrains/kotlinx/dataframe/DataFrame;[Lkotlin/reflect/KProperty;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
+	public static final fun moveToStart (Lorg/jetbrains/kotlinx/dataframe/DataFrame;[Lorg/jetbrains/kotlinx/dataframe/columns/ColumnReference;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
 	public static final fun to (Lorg/jetbrains/kotlinx/dataframe/api/MoveClause;I)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
+	public static final fun toEnd (Lorg/jetbrains/kotlinx/dataframe/api/MoveClause;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
 	public static final fun toLeft (Lorg/jetbrains/kotlinx/dataframe/api/MoveClause;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
 	public static final fun toRight (Lorg/jetbrains/kotlinx/dataframe/api/MoveClause;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
+	public static final fun toStart (Lorg/jetbrains/kotlinx/dataframe/api/MoveClause;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
 	public static final fun toTop (Lorg/jetbrains/kotlinx/dataframe/api/MoveClause;Lkotlin/jvm/functions/Function2;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
 	public static synthetic fun toTop$default (Lorg/jetbrains/kotlinx/dataframe/api/MoveClause;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;
 	public static final fun under (Lorg/jetbrains/kotlinx/dataframe/api/MoveClause;Ljava/lang/String;)Lorg/jetbrains/kotlinx/dataframe/DataFrame;

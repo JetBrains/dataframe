@@ -89,4 +89,7 @@ internal interface DocumentationUrls {
 
     /** [See `describe` on the documentation website.]({@include [Url]}/describe.html) */
     interface Describe
+
+    /** [See `move` on the documentation website.]({@include [Url]}/move.html) */
+    interface Move
 }
