@@ -1,11 +1,14 @@
 package org.jetbrains.kotlinx.dataframe.io
 
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toKotlinLocalDate
 import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.datetime.toKotlinLocalTime
+import kotlinx.datetime.toLocalDateTime
 import org.apache.arrow.memory.RootAllocator
 import org.apache.arrow.vector.BigIntVector
 import org.apache.arrow.vector.BitVector
@@ -25,9 +28,13 @@ import org.apache.arrow.vector.TimeMicroVector
 import org.apache.arrow.vector.TimeMilliVector
 import org.apache.arrow.vector.TimeNanoVector
 import org.apache.arrow.vector.TimeSecVector
+import org.apache.arrow.vector.TimeStampMicroTZVector
 import org.apache.arrow.vector.TimeStampMicroVector
+import org.apache.arrow.vector.TimeStampMilliTZVector
 import org.apache.arrow.vector.TimeStampMilliVector
+import org.apache.arrow.vector.TimeStampNanoTZVector
 import org.apache.arrow.vector.TimeStampNanoVector
+import org.apache.arrow.vector.TimeStampSecTZVector
 import org.apache.arrow.vector.TimeStampSecVector
 import org.apache.arrow.vector.TinyIntVector
 import org.apache.arrow.vector.UInt1Vector
@@ -63,6 +70,7 @@ import java.math.BigDecimal
 import java.math.BigInteger
 import java.nio.channels.ReadableByteChannel
 import java.nio.channels.SeekableByteChannel
+import java.util.concurrent.TimeUnit
 import kotlin.reflect.KType
 import kotlin.reflect.full.withNullability
 import kotlin.reflect.typeOf
@@ -170,6 +178,16 @@ private fun TimeStampNanoVector.values(range: IntRange): List<LocalDateTime?> =
         }
     }
 
+private fun TimeStampNanoTZVector.values(range: IntRange): List<LocalDateTime?> =
+    range.mapIndexed { i, it ->
+        if (isNull(i)) {
+            null
+        } else {
+            DateUtility.getLocalDateTimeFromEpochNano(getObject(it), this.timeZone)
+                .toKotlinLocalDateTime()
+        }
+    }
+
 private fun TimeStampMicroVector.values(range: IntRange): List<LocalDateTime?> =
     range.mapIndexed { i, it ->
         if (isNull(i)) {
@@ -178,6 +196,16 @@ private fun TimeStampMicroVector.values(range: IntRange): List<LocalDateTime?> =
             getObject(it).toKotlinLocalDateTime()
         }
     }
+
+private fun TimeStampMicroTZVector.values(range: IntRange): List<LocalDateTime?> =
+    range.mapIndexed { i, it ->
+            if (isNull(i)) {
+                    null
+                } else {
+                    DateUtility.getLocalDateTimeFromEpochMicro(getObject(it), this.timeZone)
+                        .toKotlinLocalDateTime()
+                }
+        }
 
 private fun TimeStampMilliVector.values(range: IntRange): List<LocalDateTime?> =
     range.mapIndexed { i, it ->
@@ -188,12 +216,32 @@ private fun TimeStampMilliVector.values(range: IntRange): List<LocalDateTime?> =
         }
     }
 
+private fun TimeStampMilliTZVector.values(range: IntRange): List<LocalDateTime?> =
+    range.mapIndexed { i, it ->
+        if (isNull(i)) {
+            null
+        } else {
+            Instant.fromEpochMilliseconds(getObject(it))
+                .toLocalDateTime(TimeZone.of(this.timeZone))
+        }
+    }
+
 private fun TimeStampSecVector.values(range: IntRange): List<LocalDateTime?> =
     range.mapIndexed { i, it ->
         if (isNull(i)) {
             null
         } else {
             getObject(it).toKotlinLocalDateTime()
+        }
+    }
+
+private fun TimeStampSecTZVector.values(range: IntRange): List<LocalDateTime?> =
+    range.mapIndexed { i, it ->
+        if (isNull(i)) {
+            null
+        } else {
+            DateUtility.getLocalDateTimeFromEpochMilli(TimeUnit.SECONDS.toMillis(getObject(it)), this.timeZone)
+                .toKotlinLocalDateTime()
         }
     }
 
@@ -343,11 +391,19 @@ private fun readField(root: VectorSchemaRoot, field: Field, nullability: Nullabi
 
             is TimeStampNanoVector -> vector.values(range).withTypeNullable(field.isNullable, nullability)
 
+            is TimeStampNanoTZVector -> vector.values(range).withTypeNullable(field.isNullable, nullability)
+
             is TimeStampMicroVector -> vector.values(range).withTypeNullable(field.isNullable, nullability)
+
+            is TimeStampMicroTZVector -> vector.values(range).withTypeNullable(field.isNullable, nullability)
 
             is TimeStampMilliVector -> vector.values(range).withTypeNullable(field.isNullable, nullability)
 
+            is TimeStampMilliTZVector -> vector.values(range).withTypeNullable(field.isNullable, nullability)
+
             is TimeStampSecVector -> vector.values(range).withTypeNullable(field.isNullable, nullability)
+
+            is TimeStampSecTZVector -> vector.values(range).withTypeNullable(field.isNullable, nullability)
 
             is StructVector -> vector.values(range).withTypeNullable(field.isNullable, nullability)
 
