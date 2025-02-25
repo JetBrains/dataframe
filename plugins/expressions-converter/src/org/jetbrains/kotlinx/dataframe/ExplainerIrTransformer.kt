@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.ir.expressions.impl.IrConstImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrFunctionExpressionImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrGetObjectValueImpl
 import org.jetbrains.kotlin.ir.expressions.impl.IrGetValueImpl
+import org.jetbrains.kotlin.ir.symbols.UnsafeDuringIrConstructionAPI
 import org.jetbrains.kotlin.ir.symbols.impl.IrSimpleFunctionSymbolImpl
 import org.jetbrains.kotlin.ir.symbols.impl.IrValueParameterSymbolImpl
 import org.jetbrains.kotlin.ir.types.classFqName
@@ -48,15 +49,16 @@ import java.io.File
 
 data class ContainingDeclarations(val clazz: IrClass?, val function: IrFunction?, val statementIndex: Int = 0)
 
+@OptIn(UnsafeDuringIrConstructionAPI::class)
 class ExplainerIrTransformer(val pluginContext: IrPluginContext) :
     FileLoweringPass,
     IrElementTransformer<ContainingDeclarations> {
+
     lateinit var file: IrFile
     lateinit var source: String
 
     override fun lower(irFile: IrFile) {
-        var file: File
-        file = File("testData/box/${irFile.path}")
+        var file = File("testData/box/${irFile.path}")
         if (!file.exists()) {
             file = File(irFile.path)
         }
@@ -139,7 +141,12 @@ class ExplainerIrTransformer(val pluginContext: IrPluginContext) :
     override fun visitGetValue(expression: IrGetValue, data: ContainingDeclarations): IrExpression {
         if (expression.startOffset < 0) return expression
         if (expression.type.classFqName in dataFrameLike) {
-            return transformDataFrameExpression(expression, expression.symbol.owner.name, receiver = null, data)
+            return transformDataFrameExpression(
+                expression = expression,
+                ownerName = expression.symbol.owner.name,
+                receiver = null,
+                data = data,
+            )
         }
         return super.visitExpression(expression, data)
     }
@@ -177,7 +184,13 @@ class ExplainerIrTransformer(val pluginContext: IrPluginContext) :
                 CallableId(FqName("kotlin"), Name.identifier("also")),
             ).single()
 
-        val result = IrCallImpl(-1, -1, expression.type, alsoReference, 1, 1).apply {
+        val result = IrCallImpl(
+            startOffset = -1,
+            endOffset = -1,
+            type = expression.type,
+            symbol = alsoReference,
+            typeArgumentsCount = 1,
+        ).apply {
             this.extensionReceiver = expression
             putTypeArgument(0, expression.type)
 
@@ -226,16 +239,16 @@ class ExplainerIrTransformer(val pluginContext: IrPluginContext) :
                     }
                     val expressionId = expressionId(expression)
                     val receiverId = receiver?.let { expressionId(it) }
-                    val valueArguments = buildList<IrExpression?> {
-                        add(source.irConstImpl())
-                        add(ownerName.asStringStripSpecialMarkers().irConstImpl())
-                        add(IrGetValueImpl(-1, -1, itSymbol))
-                        add(expressionId.irConstImpl())
-                        add(receiverId.irConstImpl())
-                        add(data.clazz?.fqNameWhenAvailable?.asString().irConstImpl())
-                        add(data.function?.name?.asString().irConstImpl())
-                        add(IrConstImpl.int(-1, -1, pluginContext.irBuiltIns.intType, data.statementIndex))
-                    }
+                    val valueArguments = listOf(
+                        source.irConstImpl(),
+                        ownerName.asStringStripSpecialMarkers().irConstImpl(),
+                        IrGetValueImpl(-1, -1, itSymbol),
+                        expressionId.irConstImpl(),
+                        receiverId.irConstImpl(),
+                        data.clazz?.fqNameWhenAvailable?.asString().irConstImpl(),
+                        data.function?.name?.asString().irConstImpl(),
+                        IrConstImpl.int(-1, -1, pluginContext.irBuiltIns.intType, data.statementIndex),
+                    )
                     body = pluginContext.irFactory.createBlockBody(-1, -1).apply {
                         val callableId = CallableId(
                             explainerPackage,
@@ -249,7 +262,6 @@ class ExplainerIrTransformer(val pluginContext: IrPluginContext) :
                             type = doAction.owner.returnType,
                             symbol = doAction,
                             typeArgumentsCount = 0,
-                            valueArgumentsCount = valueArguments.size,
                         ).apply {
                             val clazz = ClassId(explainerPackage, Name.identifier("PluginCallbackProxy"))
                             val plugin = pluginContext.referenceClass(clazz)!!
@@ -274,7 +286,7 @@ class ExplainerIrTransformer(val pluginContext: IrPluginContext) :
         return result
     }
 
-    private fun String?.irConstImpl(): IrConstImpl<out String?> {
+    private fun String?.irConstImpl(): IrConstImpl {
         val nullableString = pluginContext.irBuiltIns.stringType.makeNullable()
         val argument = if (this == null) {
             IrConstImpl.constNull(-1, -1, nullableString)
