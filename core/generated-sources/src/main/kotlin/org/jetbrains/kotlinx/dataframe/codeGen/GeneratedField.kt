@@ -54,48 +54,30 @@ public fun FieldType.toNullable(): FieldType =
  * Returns a new fieldType with the same type but with nullability disabled in the column type.
  * NOTE: for [FieldType.FrameFieldType], the `nullable` property indicates the nullability of the frame itself, not the type of the column.
  */
-public fun FieldType.toNotNullable(): FieldType =
-    if (isNullable()) {
+public fun FieldType.toNotNullable(): FieldType {
+    fun String.toNotNullableName() = if (this == "*") "Any" else removeSuffix("?")
+
+    return if (isNullable()) {
         when (this) {
-            is FieldType.FrameFieldType ->
-                FieldType.FrameFieldType(
-                    markerName = markerName.let {
-                        if (it == "*") {
-                            "Any"
-                        } else {
-                            it.removeSuffix("?")
-                        }
-                    },
-                    nullable = nullable,
-                    renderAsList = renderAsList,
-                )
+            is FieldType.FrameFieldType -> FieldType.FrameFieldType(
+                markerName = markerName.toNotNullableName(),
+                nullable = nullable,
+                renderAsList = renderAsList
+            )
 
-            is FieldType.GroupFieldType ->
-                FieldType.GroupFieldType(
-                    markerName = markerName.let {
-                        if (it == "*") {
-                            "Any"
-                        } else {
-                            it.removeSuffix("?")
-                        }
-                    },
-                    renderAsObject = renderAsObject,
-                )
+            is FieldType.GroupFieldType -> FieldType.GroupFieldType(
+                markerName = markerName.toNotNullableName(),
+                renderAsObject = renderAsObject
+            )
 
-            is FieldType.ValueFieldType ->
-                FieldType.ValueFieldType(
-                    typeFqName = typeFqName.let {
-                        if (it == "*") {
-                            "Any"
-                        } else {
-                            it.removeSuffix("?")
-                        }
-                    },
-                )
+            is FieldType.ValueFieldType -> FieldType.ValueFieldType(
+                typeFqName = typeFqName.toNotNullableName()
+            )
         }
     } else {
         this
     }
+}
 
 public val FieldType.name: String
     get() = when (this) {
