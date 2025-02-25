@@ -5,6 +5,7 @@ import org.jetbrains.kotlinx.dataframe.AnyColumnReference
 import org.jetbrains.kotlinx.dataframe.ColumnsSelector
 import org.jetbrains.kotlinx.dataframe.DataFrame
 import org.jetbrains.kotlinx.dataframe.annotations.AccessApiOverload
+import org.jetbrains.kotlinx.dataframe.annotations.CandidateForRemoval
 import org.jetbrains.kotlinx.dataframe.annotations.Interpretable
 import org.jetbrains.kotlinx.dataframe.annotations.Refine
 import org.jetbrains.kotlinx.dataframe.columns.ColumnWithPath
@@ -40,10 +41,12 @@ public class GroupClause<T, C>(internal val df: DataFrame<T>, internal val colum
 @JvmName("intoString")
 @OverloadResolutionByLambdaReturnType
 @OptIn(ExperimentalTypeInference::class)
+@CandidateForRemoval
 public fun <T, C> GroupClause<T, C>.into(column: ColumnsSelectionDsl<T>.(ColumnWithPath<C>) -> String): DataFrame<T> =
     df.move(columns).under { column(it).toColumnAccessor() }
 
 @JvmName("intoColumn")
+@CandidateForRemoval
 public fun <T, C> GroupClause<T, C>.into(
     column: ColumnsSelectionDsl<T>.(ColumnWithPath<C>) -> AnyColumnReference,
 ): DataFrame<T> = df.move(columns).under(column)
