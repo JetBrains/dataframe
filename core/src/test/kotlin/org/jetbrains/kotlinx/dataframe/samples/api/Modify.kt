@@ -77,6 +77,7 @@ import org.jetbrains.kotlinx.dataframe.api.remove
 import org.jetbrains.kotlinx.dataframe.api.rename
 import org.jetbrains.kotlinx.dataframe.api.reorder
 import org.jetbrains.kotlinx.dataframe.api.replace
+import org.jetbrains.kotlinx.dataframe.api.replaceAll
 import org.jetbrains.kotlinx.dataframe.api.reverse
 import org.jetbrains.kotlinx.dataframe.api.schema
 import org.jetbrains.kotlinx.dataframe.api.select
@@ -176,6 +177,18 @@ class Modify : TestBase() {
         val updated =
             // SampleStart
             df.update { colsOf<String?>() }.perRowCol { row, col -> col.name() + ": " + row.index() }
+        // SampleEnd
+    }
+
+    @Test
+    @TransformDataFrameExpressions
+    fun replaceAll() {
+        // SampleStart
+        functions.replaceAll(
+            "DataFrame<*>" to "DataFrame",
+            "DataRow<*>" to "DataRow",
+            "AnyRow" to "DataRow",
+        ) { receiverType and returnType }
         // SampleEnd
     }
 

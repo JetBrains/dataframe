@@ -42,6 +42,21 @@ df.update { city }.where { name.firstName == "Alice" }.with { "Paris" }
 <dataFrame src="org.jetbrains.kotlinx.dataframe.samples.api.Modify.updateWithConst.html"/>
 <!---END-->
 
+Update with mapping:
+
+<!---FUN replaceAll-->
+
+```kotlin
+functions.replaceAll(
+    "DataFrame<*>" to "DataFrame",
+    "DataRow<*>" to "DataRow",
+    "AnyRow" to "DataRow",
+) { receiverType and returnType }
+```
+
+<dataFrame src="org.jetbrains.kotlinx.dataframe.samples.api.Modify.replaceAll.html"/>
+<!---END-->
+
 Update with value depending on row:
 
 <!---FUN updateWith-->

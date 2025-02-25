@@ -5,6 +5,7 @@ package org.jetbrains.kotlinx.dataframe.samples.api
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import org.jetbrains.kotlinx.dataframe.DataFrame
 import org.jetbrains.kotlinx.dataframe.DataRow
 import org.jetbrains.kotlinx.dataframe.annotations.DataSchema
 import org.jetbrains.kotlinx.dataframe.api.asColumnGroup
@@ -20,6 +21,7 @@ import org.jetbrains.kotlinx.dataframe.api.to
 import org.jetbrains.kotlinx.dataframe.columns.ColumnWithPath
 import org.jetbrains.kotlinx.dataframe.explainer.PluginCallbackProxy
 import org.jetbrains.kotlinx.dataframe.impl.columns.asValueColumn
+import org.jetbrains.kotlinx.dataframe.io.readJsonStr
 import org.junit.After
 import org.junit.Before
 
@@ -110,6 +112,115 @@ public open class TestBase {
     }
 
     infix fun <T, U : T> T.willBe(expected: U?) = shouldBe(expected)
+
+    @DataSchema
+    interface Functions {
+        val receiverType: String
+        val name: String
+        val parameters: List<String>
+        val returnType: String
+    }
+
+    val functions = DataFrame.readJsonStr(
+        """
+        [{
+          "receiverType": "DataRow<*>",
+          "name": "rowStd",
+          "parameters": ["skipNA: Boolean = skipNA_default", "ddof: Int = ddof_default"],
+          "returnType": "Double"
+        }, {
+          "receiverType": "DataRow<*>",
+          "name": "rowStdOf",
+          "parameters": ["ddof: Int = ddof_default"],
+          "returnType": "Double"
+        }, {
+          "receiverType": "DataFrame",
+          "name": "stdFor",
+          "parameters": ["skipNA: Boolean = skipNA_default", "ddof: Int = ddof_default", "columns: ColumnsForAggregateSelector<T, Number?>"],
+          "returnType": "DataRow"
+        }, {
+          "receiverType": "DataFrame",
+          "name": "replace",
+          "parameters": ["columns: ColumnsSelector<T, C>"],
+          "returnType": "ReplaceClause"
+        }, {
+          "receiverType": "DataFrame",
+          "name": "copy",
+          "parameters": [],
+          "returnType": "DataFrame"
+        },{
+          "receiverType": "AnyRow",
+          "name": "transposeTo",
+          "parameters": [],
+          "returnType": "DataFrame"
+        }, {
+          "receiverType": "DataFrame",
+          "name": "tail",
+          "parameters": ["numRows: Int = 5"],
+          "returnType": "DataFrame"
+        }, {
+          "receiverType": "DataFrame",
+          "name": "mapToFrame",
+          "parameters": ["body: AddDsl<T>.() -> Unit"],
+          "returnType": "AnyFrame"
+        }, {
+          "receiverType": "DataFrame",
+          "name": "asGroupBy",
+          "parameters": ["groupedColumnName: String"],
+          "returnType": "GroupBy"
+        }, {
+          "receiverType": "DataFrame",
+          "name": "select",
+          "parameters": ["columns: ColumnsSelector<T, *>"],
+          "returnType": "DataFrame"
+        }, {
+          "receiverType": "DataFrame",
+          "name": "split",
+          "parameters": ["columns: ColumnsSelector<T, C?>"],
+          "returnType": "Split"
+        }, {
+          "receiverType": "DataRow<*>",
+          "name": "allNA",
+          "parameters": [],
+          "returnType": "Boolean"
+        }, {
+          "receiverType": "DataRow<*>",
+          "name": "rowMean",
+          "parameters": ["skipNA: Boolean = skipNA_default"],
+          "returnType": "Double"
+        }, {
+          "receiverType": "DataRow<*>",
+          "name": "rowMeanOf",
+          "parameters": [],
+          "returnType": "Double"
+        }, {
+          "receiverType": "DataFrame",
+          "name": "meanFor",
+          "parameters": ["skipNA: Boolean = skipNA_default", "columns: ColumnsForAggregateSelector<T, C?>"],
+          "returnType": "DataRow"
+        }, {
+          "receiverType": "DataFrame",
+          "name": "fillNulls",
+          "parameters": ["columns: ColumnsSelector<T, C?>"],
+          "returnType": "Update"
+        }, {
+          "receiverType": "DataFrame",
+          "name": "fillNaNs",
+          "parameters": ["columns: ColumnsSelector<T, C>"],
+          "returnType": "Update"
+        }, {
+          "receiverType": "DataFrame",
+          "name": "fillNA",
+          "parameters": ["columns: ColumnsSelector<T, C?>"],
+          "returnType": "Update"
+        }, {
+          "receiverType": "DataFrame<*>",
+          "name": "toListOf",
+          "parameters": [],
+          "returnType": "List<T>"
+        }]
+        """.trimIndent()
+    ).cast<Functions>(verify = true)
 
     /**
      * Asserts that all elements of the iterable are equal to each other
