@@ -367,7 +367,13 @@ internal fun createConverter(from: KType, to: KType, options: ParserOptions? = n
 
             Char::class -> when (toClass) {
                 Int::class -> convert<Char> { it.code }
-                else -> null
+
+                else -> // convert char to string and then to target type
+                    getConverter(typeOf<String>(), to, options)?.let { stringConverter ->
+                        convert<Char> {
+                            stringConverter(it.toString())
+                        }
+                    }
             }
 
             Int::class -> when (toClass) {

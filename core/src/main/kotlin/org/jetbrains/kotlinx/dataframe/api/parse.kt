@@ -19,6 +19,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.reflect.KProperty
 import kotlin.reflect.KType
+import kotlin.reflect.typeOf
 
 /**
  * ### Global Parser Options
@@ -206,6 +207,28 @@ public class ParserOptions(
 /** @include [tryParseImpl] */
 public fun DataColumn<String?>.tryParse(options: ParserOptions? = null): DataColumn<*> = tryParseImpl(options)
 
+/**
+ * Tries to parse a column of chars into a column of a different type.
+ * Each parser in [Parsers] is run in order until a valid parser is found,
+ * a.k.a. that parser was able to parse all values in the column successfully. If a parser
+ * fails to parse any value, the next parser is tried. If all the others fail, the final parser
+ * returns strings.
+ *
+ * Parsers that are [covered by][StringParser.coveredBy] other parsers are skipped.
+ *
+ * @param options options for parsing, like providing a locale or a custom date-time formatter
+ * @throws IllegalStateException if no valid parser is found (unlikely, unless the `String` parser is disabled)
+ * @return a new column with parsed values
+ */
+@JvmName("tryParseChar")
+public fun DataColumn<Char?>.tryParse(options: ParserOptions? = null): DataColumn<*> {
+    // skip the Char parser, as we're trying to parse away from Char
+    val providedSkipTypes = options?.skipTypes ?: DataFrame.parser.skipTypes
+    val parserOptions = (options ?: ParserOptions()).copy(skipTypes = providedSkipTypes + typeOf<Char>())
+
+    return map { it?.toString() }.tryParse(parserOptions)
+}
+
 public fun <T> DataFrame<T>.parse(options: ParserOptions? = null): DataFrame<T> =
     parse(options) {
         colsAtAnyDepth { !it.isColumnGroup() }
@@ -228,6 +251,23 @@ public fun <T> DataFrame<T>.parse(options: ParserOptions? = null): DataFrame<T> 
  */
 public fun DataColumn<String?>.parse(options: ParserOptions? = null): DataColumn<*> =
     tryParse(options).also { if (it.typeClass == String::class) error("Can't guess column type") }
+
+/**
+ * Tries to parse a column of chars as strings into a column of a different type.
+ * Each parser in [Parsers] is run in order until a valid parser is found,
+ * a.k.a. that parser was able to parse all values in the column successfully. If a parser
+ * fails to parse any value, the next parser is tried.
+ *
+ * If all fail, the column is returned as `String`, this can never fail.
+ *
+ * Parsers that are [covered by][StringParser.coveredBy] other parsers are skipped.
+ *
+ * @param options options for parsing, like providing a locale or a custom date-time formatter
+ * @return a new column with parsed values
+ */
+@JvmName("parseChar")
+public fun DataColumn<Char?>.parse(options: ParserOptions? = null): DataColumn<*> =
+    tryParse(options) // no need to throw an exception, as Char can always be parsed as String
 
 @JvmName("parseAnyFrameNullable")
 public fun DataColumn<AnyFrame?>.parse(options: ParserOptions? = null): DataColumn<AnyFrame?> =

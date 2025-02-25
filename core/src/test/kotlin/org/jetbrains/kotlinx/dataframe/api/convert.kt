@@ -3,6 +3,7 @@ package org.jetbrains.kotlinx.dataframe.api
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalTime
@@ -69,6 +70,20 @@ class ConvertTests {
     @Test
     fun `convert string to enum`() {
         columnOf("A", "B").convertTo<EnumClass>() shouldBe columnOf(EnumClass.A, EnumClass.B)
+
+        dataFrameOf(columnOf("A", "B") named "colA")
+            .convert("colA").to<EnumClass>()
+            .getColumn("colA") shouldBe columnOf(EnumClass.A, EnumClass.B).named("colA")
+    }
+
+    @Test
+    fun `convert char to enum`() {
+        // Char -> String -> Enum
+        columnOf('A', 'B').convertTo<EnumClass>() shouldBe columnOf(EnumClass.A, EnumClass.B)
+
+        dataFrameOf(columnOf('A', 'B') named "colA")
+            .convert("colA").to<EnumClass>()
+            .getColumn("colA") shouldBe columnOf(EnumClass.A, EnumClass.B).named("colA")
     }
 
     @JvmInline
@@ -199,6 +214,15 @@ class ConvertTests {
         val col = columnOf(65, 66)
         col.convertTo<Char>() shouldBe columnOf('A', 'B')
         col.convertTo<Char>().convertTo<Int>() shouldBe col
+
+        // this means
+        columnOf('1', '2').convertToInt() shouldNotBe columnOf(1, 2)
+        columnOf('1', '2').convertToInt() shouldBe columnOf(49, 50)
+
+        // but
+        columnOf('1', '2').convertToString().convertToInt() shouldBe columnOf(1, 2)
+        // or
+        columnOf('1', '2').parse() shouldBe columnOf(1, 2)
     }
 
     @Test

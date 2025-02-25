@@ -45,8 +45,10 @@ import org.jetbrains.kotlinx.dataframe.schema.ColumnSchema
 import org.jetbrains.kotlinx.dataframe.schema.DataFrameSchema
 import org.jetbrains.kotlinx.dataframe.size
 import kotlin.reflect.KType
+import kotlin.reflect.full.isSubtypeOf
 import kotlin.reflect.full.withNullability
 import kotlin.reflect.jvm.jvmErasure
+import kotlin.reflect.typeOf
 
 private val logger = KotlinLogging.logger {}
 
@@ -143,7 +145,22 @@ internal fun AnyFrame.convertToImpl(
                         // try to perform any user-specified conversions first
                         val from = originalColumn.type()
                         val to = targetSchema.type
-                        val converter = dsl.getConverter(from, targetSchema)
+                        var converter = dsl.getConverter(from, targetSchema)
+
+                        // special case for Char columns; check if we have any converters for String -> target
+                        // if so, we can convert Char -> String -> target
+                        if (converter == null && from.isSubtypeOf(typeOf<Char?>())) {
+                            val stringConverter = dsl.getConverter(
+                                fromType = typeOf<String>().withNullability(from.isMarkedNullable),
+                                toSchema = targetSchema,
+                            )
+                            if (stringConverter != null) {
+                                converter = Converter(
+                                    transform = { stringConverter.transform(this, (it as Char?)?.toString()) },
+                                    skipNulls = stringConverter.skipNulls,
+                                )
+                            }
+                        }
 
                         val convertedColumn = if (converter != null) {
                             val nullsAllowed = to.isMarkedNullable

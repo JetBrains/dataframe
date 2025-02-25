@@ -46,6 +46,12 @@ class ParserTests {
         DataFrame.parser.resetToDefault()
     }
 
+    @Test
+    fun `parse to Char`() {
+        val col by columnOf("a", "b")
+        col.parse().type() shouldBe typeOf<Char>()
+    }
+
     @Test(expected = IllegalStateException::class)
     fun `parse should throw`() {
         val col by columnOf("a", "bc")
