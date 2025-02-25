@@ -279,7 +279,7 @@ public interface DataColumn<out T> : BaseColumn<T> {
         // endregion
     }
 
-    public fun hasNulls(): Boolean = type().isMarkedNullable
+    public fun hasNulls(): Boolean = values().any { it == null }
 
     override fun distinct(): DataColumn<T>
 

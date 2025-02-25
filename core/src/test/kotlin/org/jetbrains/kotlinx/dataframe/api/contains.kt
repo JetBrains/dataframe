@@ -1,7 +1,11 @@
 package org.jetbrains.kotlinx.dataframe.api
 
 import io.kotest.matchers.shouldBe
+import org.jetbrains.kotlinx.dataframe.DataColumn
+import org.jetbrains.kotlinx.dataframe.hasNulls
 import org.junit.Test
+import kotlin.reflect.full.withNullability
+import kotlin.reflect.typeOf
 
 class ContainsTests {
 
@@ -61,5 +65,13 @@ class ContainsTests {
         row.containsKey("b") shouldBe false
         row.containsKey(b) shouldBe false
         row.containsKey(A::b) shouldBe false
+    }
+
+    @Test
+    fun `nullable vs has nulls`() {
+        val nullable = DataColumn.create("nullable", listOf("a" as String?, "b" as String?, "c" as String?))
+        nullable.hasNulls shouldBe false
+        val notNullable = DataColumn.create("notNullable", listOf("a" as String?, "b" as String?, "c" as String?, null as String?), typeOf<String>().withNullability(false))
+        notNullable.hasNulls shouldBe true
     }
 }
