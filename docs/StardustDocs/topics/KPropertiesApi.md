@@ -13,7 +13,7 @@ This can be done using `::` expression that provides [property references](https
 data class Passenger(
     val survived: Boolean,
     val home: String,
-    val age: Int,
+    val age: Int?,
     val lastName: String
 )
 
